@@ -1,0 +1,271 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+\usepackage[usenames]{color}
+\newcommand{\ans}[1]{\textcolor{red}{#1}}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Sports Academy \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{2016}{Lab 6 Solutions}
+
+\paragraph{Exercise 1:}
+Write a recursive procedure \texttt{addDigits}(n) which takes a
+nonnegative integer n and returns the sum of the digits of n.
+
+\paragraph{Example solution:}
+\begin{verbatim}
+def addDigits(n):
+    if n==0:
+        return 0
+    return (n%10) + addDigits(n/10)
+\end{verbatim}
+
+\paragraph{Exercise 2:}
+Python already has a function \texttt{reverse()} for lists
+(\texttt{L.reverse()} reverses the \texttt{list} L).  Let's implement
+our own \texttt{reverse()} function using recursion.
+\texttt{reverse}(L) should be a recursive function that outputs a
+\texttt{list} which contains the elements of L in reverse. Remember
+that L[i:] evaluates to a \texttt{list} containing only the elements
+of L from index i onward.
+
+\paragraph{Example solution:}
+\begin{verbatim}
+def reverse(L):
+    if len(L)==0:
+        return []
+    return [L[len(L)-1]] + reverse(L[:len(L)-1])
+\end{verbatim}
+
+\paragraph{Exercise 3:}
+Write a recursive procedure \texttt{minElement}(L) which takes a
+\texttt{list}  L of integers and returns the minimum element in the
+\texttt{list}.
+
+\paragraph{Example solution:}
+\begin{verbatim}
+def minElement(L):
+    if len(L)==1:
+        return L[0]
+    return min(L[0], minElement(L[1:]))
+\end{verbatim}
+
+\paragraph{Exercise 4:}
+A {\em superknight} is on a chessboard, at grid location $(0,0)$ (the
+bottom left corner).  How many ways can he get to the location
+$(x,y)$ if his allowed moves are given in the \texttt{list} L?  Write
+a function \texttt{numKnightWays}(x,y,L) that returns this number.
+Each element in L is a list of size two [i,j] signifying that it is
+possible for the knight to move from $(a,b)$ to $(a+i, b+j)$.  $i,j$
+are always both positive.
+
+\paragraph{Example solution:}
+\begin{verbatim}
+# return the number of ways to get to x,y given that we are currently
+# at position (atx, aty)
+def knightRecurse(atx, aty, x, y, L):
+    if (atx>x) or (aty>y):
+        return 0
+    elif atx==x and aty==y:
+        return 1
+    ans = 0
+    for t in L:
+        ans += knightRecurse(atx+t[0], aty+t[1], x, y, L)
+    return ans
+
+def numKnightWays(x, y, L):
+    return knightRecurse(0, 0, x, y, L)
+\end{verbatim}
+
+The above solution can be sped up using memoization, by memoizing
+based on \texttt{atx} and \texttt{aty}.
+
+\begin{verbatim}
+def knightRecurse(atx, aty, x, y, L, mem):
+    if (atx>x) or (aty>y):
+        return 0
+    elif atx==x and aty==y:
+        return 1
+    elif mem[atx][aty] != -1:
+        return mem[atx][aty]
+    mem[atx][aty] = 0
+    for t in L:
+        mem[atx][aty] += knightRecurse(atx+t[0], aty+t[1], x, y, L, mem)
+    return mem[atx][aty]
+
+def numKnightWays(x, y, L):
+    mem = []
+    for i in xrange(x+1):
+        mem += [[-1]*(y+1)]
+    return knightRecurse(0, 0, x, y, L, mem)
+\end{verbatim}
+
+\paragraph{Exercise 5:}
+An {\em expression} is defined recursively as follows.  An integer is
+an expression, which evaluates to the integer itself.  If
+\texttt{EXPR} is an expression, then so is
+(\texttt{EXPR}), and it evaluates to whatever \texttt{EXPR} evaluated
+to.  Finally, if \texttt{EXPR1} and \texttt{EXPR2} are
+expressions, then (\texttt{OP} \texttt{EXPR1} \texttt{EXPR2}) is an
+expression, where \texttt{OP} can be any one of $+,-,*$, and it
+evaluates to \texttt{evaluate}(\texttt{EXPR1}) \texttt{OP}
+\texttt{evaluate}(\texttt{EXPR2}).  You should
+write a function \texttt{evaluate} which takes a \texttt{str} and
+evaluates the expression it is a valid expression, and outputs
+``INVALID'' if it is not a valid expression.  For example:
+
+\begin{itemize}
+\item \texttt{evaluate}(`(+ 1 5)') gives 6.
+\item \texttt{evaluate}(`(* 3 (- 5 2))') gives 9 (first (- 5 2) is
+  evaluated as $5-2 = 3$, and then we have $3*3 = 9$).
+\item \texttt{evaluate}(`(+ 1 (+ 5))') gives ``INVALID'' since (+ 5)
+  is not a valid expression.
+\item \texttt{evaluate}(`()') gives ``INVALID'' since the empty string
+  is not a valid expression.
+\end{itemize}
+
+\paragraph{Example solution:}
+Below is a recursive solution.
+
+\begin{verbatim}
+# returns True if c represents a digit from `0' to `9'
+# and False otherwise
+def isDigit(c):
+    return c>=`0' and c<=`9'
+
+def isOperator(c):
+    return c==`+' or c==`-' or c==`*'
+
+# find the first prefix of expr which could be a valid expression
+# return INVALID of no such prefix exists
+def locateExpression(expr):
+    if len(expr) == 0:
+        return `INVALID'
+    elif isDigit(expr[0]):
+        # try to build an integer expression as a prefix
+        at = 1
+        while at<len(expr) and isDigit(expr[at]):
+            at += 1
+        return expr[:at]
+    elif expr[0] == `-':
+        # try to build a negative integer expression as a prefix
+        if len(expr) == 1:
+            return `INVALID'
+        elif not isDigit(expr[1]):
+            return `INVALID'
+        at = 2
+        while at<len(expr) and isDigit(expr[at]):
+            at += 1
+        return expr[:at]
+    elif expr[0] == `(':
+        # find the matching parenthesis
+        x = 1
+        at = 1
+        while at<len(expr) and x>0:
+            if expr[at]==`(':
+                x += 1
+            elif expr[at]==`)':
+                x -= 1
+            at += 1
+        if x != 0:
+            return `INVALID'
+        return expr[:at]
+    else:
+        return `INVALID'
+
+def evaluate(expr):
+    if len(expr) == 0:
+        return `INVALID'
+    elif expr[0] != `(':
+        if locateExpression(expr) == expr:
+            return int(expr)
+        else:
+            return `INVALID'
+    else:
+        if len(expr) == 1:
+            # if the first letter is `(', we at least need `)' at end
+            return `INVALID'
+        elif expr[len(expr)-1] != `)':
+            return `INVALID'
+        elif isOperator(expr[1]):
+            # in this case we need to apply an OP to two exprs
+            if (len(expr) < 7) or (expr[2] != ` '):
+                # we need at least 7 characters for (, OP, two spaces, and two exprs
+                return `INVALID'
+            expr1 = locateExpression(expr[3:])
+            if expr1 == `INVALID':
+                return `INVALID'
+            elif len(expr1) >= len(expr)-4:
+                # if expr1 is too long, there's no room left for expr2
+                return `INVALID'
+            elif expr[3+len(expr1)] != ` ':
+                # a space should separate the two expressions
+                return `INVALID'
+            expr2 = locateExpression(expr[4+len(expr1):])
+            if expr2 == `INVALID':
+                return `INVALID'
+            elif len(expr1)+len(expr2)+5 != len(expr):
+                # expr should be (OP space expr1 space expr2)
+                return `INVALID'
+            # evaluate the two expressions recursively
+            A = evaluate(expr1)
+            B = evaluate(expr2)
+            if (A==`INVALID') or (B==`INVALID'):
+                return `INVALID'
+            elif expr[1] == `+':
+                return A + B
+            elif expr[1] == `-':
+                return A - B
+            else:
+                return A * B
+        else:
+            return evaluate(expr[1:len(expr)-1])
+\end{verbatim}
+
+\end{document}

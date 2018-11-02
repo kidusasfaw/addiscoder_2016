@@ -1,0 +1,31 @@
+- point_value: 20
+  timeout_milliseconds: 1000
+  input: |
+    27 8 98 76 10
+  output: |
+    8
+  is_secret: false
+
+- point_value: 20
+  timeout_milliseconds: 1000
+  input: |
+    8 -10 -11 0 25
+  output: |
+    -10.1
+  is_secret: true
+
+- point_value: 30
+  timeout_milliseconds: 1000
+  input: |
+    28 45 87 0 -2
+  output: |
+    -2
+  is_secret: true
+
+- point_value: 30
+  timeout_milliseconds: 1000
+  input: |
+    -5 4 3 2 1
+  output: |
+    -5
+  is_secret: true

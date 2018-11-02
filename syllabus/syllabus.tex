@@ -1,0 +1,89 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Addis Ababa University, Amist Kilo \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{July 4, 2011}{Course Plan}
+
+\begin{itemize}
+\item[] \begin{center}{\Large \bf{Week 1}}\end{center}
+\item[July 4:] What is programming? 
+What is an algorithm? Overview of course.
+Start overview of Python. Simple types, variables, expressions,
+  basic arithmetic and comparison operators, operator precedence,
+  lists, strings, functions.
+\item[July 5:] Control flow: \texttt{if/else}, 
+  \texttt{for}, \texttt{in}, \texttt{while}, \texttt{break}, \texttt{continue},
+  \texttt{range()}, \texttt{len()}.
+\item[July 6:] Recursion: Fibonacci example.
+\item[July 7:] Sorting: Bubble-sort, insertion sort, mergesort.
+\item[July 8:] Asymptotic analysis.  Analyze the three sorting
+  algorithms.
+\item[] \begin{center}{\Large \bf{Week 2}}\end{center}
+\item[July 11:]
+\item[July 12:]
+\item[July 13:]
+\item[July 14:]
+\item[July 15:]
+\item[] \begin{center}{\Large \bf{Week 3}}\end{center}
+\item[July 18:]
+\item[July 19:]
+\item[July 20:]
+\item[July 21:]
+\item[July 22:]
+\item[] \begin{center}{\Large \bf{Week 4}}\end{center}
+\item[July 25:]
+\item[July 26:]
+\item[July 27:]
+\item[July 28:]
+\item[July 29:]
+\end{itemize}
+
+\end{document}

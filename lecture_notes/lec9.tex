@@ -1,0 +1,108 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+\usepackage{pgf}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Addis Ababa University, Amist Kilo \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{July 28, 2016}{Lecture 9}
+
+\paragraph{\Large Text justification:}
+In the problem of text justification, we are given a long text which
+is a sequence of words separated by a string.  We have a book that can
+fit pageWidth characters per line, and we would like to organize the
+text on separate lines to minimize the ugliness of the layout.  We
+imagine we have some penalty function which tells us how ugly a line
+looks (the bigger the penalty, the uglier the line).  In particular in
+today's lecture, if we don't use $n$ possible character slots on a given
+line, the penalty is $n^3$. The penalty of an entire layout is the sum
+of penalties over all lines.  We would like to fit words on our pages
+so as to minimize the maximum penalty.  This can be done via dynamic
+programming.
+
+\begin{verbatim}
+def penalty(length, pageWidth):
+    if length==0:
+        return 0
+    n = pageWidth - length
+    return n**3
+
+def memoize(L, at, length, pageWidth, mem):
+    if at==len(L):
+        return penalty(length, pageWidth)
+    elif mem[at][length] != -1:
+        return mem[at][length]
+    mem[at][length] = pageWidth**3
+    # start a new line
+    if length > 0:
+        mem[at][length] = penalty(length, pageWidth) + memoize(L,
+                                  at+1, len(L[at]), pageWidth, mem)
+    # put the word on this line, and we need a space to separate it
+    # from the previous word
+    if len(L[at])+1 <= pageWidth - length:
+        mem[at][length] = min(mem[at][length], 
+                              memoize(L, at+1, length+len(L[at])+1,
+                                      pageWidth, mem))
+    return mem[at][length]
+
+def textJustify(text, pageWidth):
+    L = text.split(' ')
+    for word in text:
+        if len(word) > pageWidth:
+            return 'Impossible'
+    mem = []
+    for i in xrange(len(L)):
+        x = []
+        for j in xrange(pageWidth+1):
+            x += [-1]
+        mem += [x]
+    return memoize(L, 1, len(L[0]), pageWidth, mem)
+\end{verbatim}
+
+\end{document}

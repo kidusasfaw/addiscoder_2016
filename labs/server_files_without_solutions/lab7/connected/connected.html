@@ -1,0 +1,36 @@
+<pre class="problemtext">
+You are given N adjacency lists, each representing one graph. An adjacency list A represents
+a graph G with V vertices and E edges, where the vertices are labeled 0,1,...,V-1.
+
+Write a function <b>connected(A,i,j)</b> which takes an adjacency
+list A and two vertices i,j, and outputs True if there is a
+path connecting i to j in the graph G represented by A, and
+outputs False otherwise. All vertices are guaranteed to have at
+least one neighbor.
+
+CONSTRAINTS
+N &le; 5
+V &le; 10<sup>4</sup> for all test cases (where V is the number of vertices in G)
+E &le; 10<sup>5</sup> for all test cases (where E is the number of edges in G)
+
+TIME LIMIT
+200ms, for cases where graphs have at most 1000 vertices.
+400ms, for cases where graphs have at most 10000 vertices.
+
+INPUT FORMAT
+The first line of the input contains a single integer N, the number of graph problems.
+
+The remainder of the input is divided into N sections, each representing a single
+graph problem (a graph given by an adjacency list, and a query of whether or not
+two given vertices are connected). The first line of each section contains three
+space separated integers, V, i, and j. Each of the next V lines describes the
+neighbors of vertices 0,1,...,V-1, in that order, as a space-separated list of
+indices.
+
+Each section follows directly from the previous, without any separation.
+
+OUTPUT FORMAT
+For each query, please output True on a new line if the two given vertices are
+connected, and False on a new line otherwise.
+
+</pre>

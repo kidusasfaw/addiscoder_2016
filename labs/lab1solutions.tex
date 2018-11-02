@@ -1,0 +1,221 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+\usepackage[usenames]{color}
+\newcommand{\ans}[1]{\textcolor{red}{#1}}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Sports Academy \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{2016}{Lab 1 Solutions}
+
+Today you will gain some hands-on experience in programming by
+working with Python.  At your machine, run Python IDLE by going to
+Start$\rightarrow$All Programs$\rightarrow$Python 2.7$\rightarrow$IDLE
+(Python GUI). From this interface, you can evaluate expressions.
+
+If you are working on your own laptop, you should download Python 2.7
+at \texttt{http://www.python.org}.  Also, the lecture notes and labs
+are on the website \texttt{http://www.addiscoder.com}
+
+\paragraph{Exercise 1:}
+Imagine evaluating the expressions below in the order given.
+What would they evaluate to (some of them will give
+errors)? Come up with an answer for
+each expression before typing it into IDLE and see if you get it
+right.
+
+\begin{itemize}
+\item[$>>>$] \begin{verbatim}5 + 4*3\end{verbatim}
+\item[] \ans{17}
+\item[$>>>$] \begin{verbatim}5+4 * 3\end{verbatim}
+\item[] \ans{17}
+\item[$>>>$] \begin{verbatim}(5 + 4)*3\end{verbatim}
+\item[] \ans{27}
+\item[$>>>$] \begin{verbatim}(5 + 4.0)*3\end{verbatim}
+\item[] \ans{27.0}
+\item[$>>>$] \begin{verbatim}(5 + 4.0)/3\end{verbatim}
+\item[] \ans{3.0}
+\item[$>>>$] \begin{verbatim}5 + 4.0/3\end{verbatim}
+\item[] \ans{6.333333333333333}
+\item[$>>>$] \begin{verbatim}5 + 4.0//3\end{verbatim}
+\item[] \ans{6.0}
+\item[$>>>$] \begin{verbatim}5+`4' * 3\end{verbatim}
+\item[] Error, trying to add \texttt{int} 5 to \texttt{str} '444'
+\item[$>>>$] \begin{verbatim}`5'+`4' * 3\end{verbatim}
+\item[] \ans{`5444'}
+\item[$>>>$] \begin{verbatim}(`5'+`4') * 3\end{verbatim}
+\item[] \ans{`545454'}
+\item[$>>>$] \begin{verbatim}2**3*3\end{verbatim}
+\item[] \ans{24}
+\item[$>>>$] \begin{verbatim}(2**3)*3\end{verbatim}
+\item[] \ans{24}
+\item[$>>>$] \begin{verbatim}2**(3*3)\end{verbatim}
+\item[] \ans{512}
+\item[$>>>$] \begin{verbatim}[5]+`4' * 3\end{verbatim}
+\item[] Error, trying to add \texttt{list} [5] to \texttt{str} `444'
+\item[$>>>$] \begin{verbatim}[5]+[4] * 3\end{verbatim}
+\item[] \ans{[5,4,4,4]}
+\item[$>>>$] \begin{verbatim}[`a',5,2.0][2]\end{verbatim}
+\item[] \ans{2.0} (remember, indexing starts at $0$)
+\item[$>>>$] \begin{verbatim}x = [`a',5,2.0]\end{verbatim}
+\item[$>>>$] \begin{verbatim}x[0]\end{verbatim}
+\item[] \ans{`a'}
+\item[$>>>$] \begin{verbatim}x[1]\end{verbatim}
+\item[] \ans{5}
+\item[$>>>$] \begin{verbatim}x[1:2]\end{verbatim}
+\item[] \ans{[5]}
+\item[$>>>$] \begin{verbatim}x[0:3]\end{verbatim}
+\item[] \ans{[`a',5,2.0]}
+\item[$>>>$] \begin{verbatim}x[0]*x[1]\end{verbatim}
+\item[] \ans{`aaaaa'}
+\item[$>>>$] \begin{verbatim}x[0]*x[2]\end{verbatim}
+\item[] Error, trying to multiply \texttt{str} `a' by \texttt{float}
+  2.0 (can only multiply \texttt{str} by \texttt{int} or \texttt{long})
+\item[$>>>$] \begin{verbatim}x[1]+x[2]\end{verbatim}
+\item[] \ans{7.0}
+\item[$>>>$] \begin{verbatim}x[1]**x[2]\end{verbatim}
+\item[] \ans{25.0}
+\item[$>>>$] \begin{verbatim}x += x[1]*x\end{verbatim}
+\item[$>>>$] \begin{verbatim}x\end{verbatim}
+\item[] \ans{['a', 5, 2.0, 'a', 5, 2.0, 'a', 5, 2.0, 'a', 5, 2.0, 'a', 5, 2.0, 'a', 5, 2.0]}
+\item[$>>>$] \begin{verbatim}y = x[2:4]\end{verbatim}
+\item[$>>>$] \begin{verbatim}y\end{verbatim}
+\item[] \ans{[2.0, `a']}
+\item[$>>>$] \begin{verbatim}x = x[0:2]\end{verbatim}
+\item[$>>>$] \begin{verbatim}x + y\end{verbatim}
+\item[] \ans{[`a', 5, 2.0, `a']}
+\item[$>>>$] \begin{verbatim}x = `123456789'\end{verbatim}
+\item[$>>>$] \begin{verbatim}x + y\end{verbatim}
+\item[] Error, trying to add \texttt{str} `123456789' to
+    \texttt{list} [2.0, `a']
+\item[$>>>$] \begin{verbatim}x[2:5]\end{verbatim}
+\item[] \ans{`345'}
+\item[$>>>$] \begin{verbatim}x[2:5]*x[2]\end{verbatim}
+\item[] Error, trying to multiply \texttt{str} `345' by
+    \texttt{str} `3'
+\item[$>>>$] \begin{verbatim}y = [3,2,1]\end{verbatim}
+\item[$>>>$] \begin{verbatim}x[2:5] + x[y[2]] \end{verbatim}
+\item[] \ans{`3452'}
+\item[$>>>$] \begin{verbatim}y = [1,2,3,4,5,6]\end{verbatim}
+\item[$>>>$] \begin{verbatim}y\end{verbatim}
+\item[] \ans{[1,2,3,4,5,6]}
+\item[$>>>$] \begin{verbatim}y[0:4] = [7]\end{verbatim}
+\item[$>>>$] \begin{verbatim}y\end{verbatim}
+\item[] \ans{[7,5,6]}
+\item[$>>>$] \begin{verbatim}not True or True\end{verbatim}
+\item[] \ans{True}
+\item[$>>>$] \begin{verbatim}not (True or True)\end{verbatim}
+\item[] \ans{False}
+\item[$>>>$] \begin{verbatim}x = 10\end{verbatim}
+\item[$>>>$] \begin{verbatim}x>20 or x%5=1\end{verbatim}
+\item[] Error, trying to assign value to
+  non-variable x\%{}5
+\item[$>>>$] \begin{verbatim}x>20 or x%5==1\end{verbatim}
+\item[] \ans{False}
+\item[$>>>$] \begin{verbatim}x<20 or x%5==0\end{verbatim}
+\item[] \ans{True}
+\end{itemize}
+
+\paragraph{Exercise 2:}
+Write a function \texttt{inchesToCentimeters(x)} which takes as input a
+numeric value $x$ corresponding to a number of inches, then outputs a
+float which is the corresponding number of centimeters.  Note: $1$
+inch is $2.54$ centimeters.
+
+For example: evaluating \texttt{inchesToCentimeters($4$)} should return
+$10.16$.  What do you think \texttt{inchesToCentimeters($1/2.54$)}
+should return?
+Try it out (due to the way in which Python stores \texttt{float}
+values, you may not get exactly what you expect, but it will be
+close).
+
+\paragraph{Example solution:}
+\begin{verbatim}
+def inchesToCentimeters(x):
+    return x*2.54
+\end{verbatim}
+
+\paragraph{Exercise 3:}
+Write a function \texttt{doubleIt(x)} which takes a \texttt{list} or
+\texttt{string} $x$ and returns $x$ concatenated with itself.
+
+\paragraph{Example solution:}
+\begin{verbatim}
+def doubleIt(x):
+    return 2*x
+\end{verbatim}
+
+or
+
+\begin{verbatim}
+def doubleIt(x):
+    return x+x
+\end{verbatim}
+
+\paragraph{Exercise 4:}
+Write a function \texttt{timeFromSeconds(x)} which takes an
+\texttt{int} x representing some number of seconds from the start of
+the day, then returns the time in hours:minute:seconds format, using
+``military time'' (so 1pm is 13:0:0, and 1am is 1:0:0). For example,
+\texttt{timeFromSeconds(0)} should
+return \texttt{`0:0:0'}. \texttt{timeFromSeconds(60)} should
+return \texttt{`0:1:0'}. \texttt{timeFromSeconds(60*60)} should
+return \texttt{`1:0:0'}. \texttt{timeFromSeconds(24*60*60 - 1)} should
+return \texttt{`23:59:59'}.
+
+\paragraph{Example solution:}
+\begin{verbatim}
+def timeFromSeconds(x):
+    seconds = x%60
+    minutes = x/60%60
+    hour = x/60/60
+    return str(hour) + `:' + str(minutes) + `:' + str(seconds)
+\end{verbatim}
+
+\end{document}

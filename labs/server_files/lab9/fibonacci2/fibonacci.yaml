@@ -1,0 +1,47 @@
+- point_value: 5
+  timeout_milliseconds: 200
+  input: |
+    1
+  output: |
+    1
+  is_secret: false
+
+- point_value: 5
+  timeout_milliseconds: 200
+  input: |
+    4
+  output: |
+   	5
+  is_secret: false
+
+- point_value: 10
+  timeout_milliseconds: 200
+  input: |
+    0
+  output: |
+    1
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 200
+  input: |
+    18
+  output: |
+    4181
+  is_secret: true
+
+- point_value: 30
+  timeout_milliseconds: 200
+  input: |
+    928453
+  output: |
+    802976800
+  is_secret: true
+
+- point_value: 40
+  timeout_milliseconds: 200
+  input: |
+    938274390218
+  output: |
+    498814467
+  is_secret: true

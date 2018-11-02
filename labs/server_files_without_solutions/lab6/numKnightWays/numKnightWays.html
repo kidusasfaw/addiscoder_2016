@@ -1,0 +1,31 @@
+<pre class="problemtext">
+A <i>superknight</i> is on a chessboard, initially at grid location (0,0) (the bottom left corner).
+
+Write a function <b>numKnightWays(x,y,L)</b> that returns <i>n</i>, the number of ways for a superknight
+to get to location (<i>x</i>,<i>y</i>) if his allowed moves are given in the list L.
+
+Each element in L is a list of size two signifying that it is possible for the knight to move
+from (<i>a</i>,<i>b</i>) to (<i>a+i</i>,<i>b+j</i>). <i>i</i> and <i>j</i> are always both positive.
+
+CONSTRAINTS
+|L| &le; 10 for all test cases
+<i>i,j</i> &le; 20 (for all pairs <i>i,j</i> in L) for test cases worth a total of 70 points
+<i>i,j</i> &le; 100 (for all pairs <i>i,j</i> in L) for final test case worth 30 points
+<i>x,y</i> &le; 20 for test cases worth a total of 70 points
+<i>x,y</i> &le; 100 for final test case worth 30 points
+
+TIME LIMIT
+200ms
+
+INPUT FORMAT
+The first line of the input contains three space separated integers, <i>x</i>, <i>y</i>, and |L| (the
+length of the list L).
+
+Each of the remaining |L| lines contain two space separated integers, <i>i<sub>k</sub></i> and <i>j<sub>k</sub></i>,
+indicating that it is possible for the superknight to move <i>i<sub>k</sub></i> units horizontally and
+<i>j<sub>k</sub></i> units vertically in a single move.
+
+OUTPUT FORMAT
+Please output the number of ways for the superknight to get to (<i>x</i>,<i>y</i>), beginning at (0,0).
+
+</pre>

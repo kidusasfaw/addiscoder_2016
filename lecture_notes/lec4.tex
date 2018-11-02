@@ -1,0 +1,182 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Addis Ababa University, Amist Kilo \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{July 21, 2016}{Lecture 4}
+
+\paragraph{\Large Recursion:}
+
+{\em Recursion} in computer science solving a problem by solving
+simpler instantiations of the same problem.  As a classic example,
+consider the {\em Fibonacci} sequence $1,1,3,5,8,13,\ldots$.  This
+sequence is defined by the $0$th and $1$st Fibonacci numbers both
+being $1$, and subsequent Fibonacci numbers being the sum of the
+previous two.
+
+That is, if $F_i$ represents the $i$th Fibonacci number,
+$$
+F_i = \begin{cases} 1 \ &
+  \mathrm{if}\ i=0\ \mathrm{or}\ i = 1
+\\ F_{i-1} + F_{i-2} \
+&\mathrm{otherwise} \end{cases}
+$$
+
+Now here is an example of using recursion to calculate the $n$th
+Fibonacci number.  Note that the \texttt{fibonacci} function calls
+itself on smaller, i.e.\ simpler, inputs.
+
+\begin{verbatim}
+def fibonacci(n):
+    if n<2:
+        return 1
+    return fibonacci(n-1) + fibonacci(n-2)
+\end{verbatim}
+
+Let's give another example.  Suppose our friend Bob has a number
+between $1$ and $100$ and isn't telling us what it is.  However, he's
+implemented a \texttt{bool} function \texttt{isGreaterThan}(n) for us
+which returns \texttt{True} if his number is greater than n and
+\texttt{False} otherwise.  Now, let's implement a function
+\texttt{searchForBobsNumber}().
+
+\begin{verbatim}
+def searchForBobsNumber():
+    x = 1
+    while isGreaterThan(x):
+        x += 1
+    return x
+\end{verbatim}
+
+We could also implement this function using a recursive helper
+function.
+
+\begin{verbatim}
+# We assume the answer is in the range [a,b]
+def searchForBobsNumberHelper(a, b):
+    if isGreaterThan(a):
+        return searchForBobsNumberHelper(a+1, b)
+    else:
+        return a
+
+def searchForBobsNumber():
+    return searchForBobsNumber(1, 100)
+\end{verbatim}
+
+\paragraph{\Large Binary Search:}
+
+If Bob's number is $100$, potentially the \texttt{while} loop in the
+above implementation would run for $100$ steps before finding Bob's
+number.  The implementation would be even slower if Bob's number could
+be in the range from $1$ to one billion, and unbearably slow if in the
+range from $1$ to one trillion.  One way of remedying this is
+using a technique known as {\em binary search}.  Suppose Bob's number
+is between $1$ and $m$ and we first ask whether his number is greater
+than $\floor{m/2}$.  Then, no matter what his number is, we will
+eliminate roughly half of the possibilities, and we can recursively
+search in the range that is left.  
+That is, consider the following
+faster version of \texttt{searchForBobsNumberHelper(a,b)} (remember
+that \texttt{int} division in Python rounds down to the nearest
+\texttt{int}):
+
+\begin{verbatim}
+# returns True if n equals Bob's number, and False otherwise
+def isEqualTo(n):
+    return isGreaterThan(n-1) and not isGreaterThan(n)
+
+# We assume the answer is in the range [a,b]
+def searchForBobsNumberHelper(a, b):
+    mid = (a+b)/2
+    if isEqualTo(mid):
+        return mid
+    elif isGreaterThan(mid):
+        return searchForBobsNumberHelper(mid+1, b)
+    else:
+        return searchForBobsNumberHelper(a, mid)
+\end{verbatim}
+
+Suppose Bob's number can be in the range $[1,m]$, and for simplicity,
+let's assume $m$ is a power of $2$ (if it isn't, we'll just pretend
+his number can be in the range $[1,q]$ where $q$ is the smallest power
+of $2$ greater than or equal to $m$).  Since we cut down
+the number of possibilities in half each time, and
+we will get the answer right away if there is only one possibility
+left, the number of times we actually need to ask Bob if his number is
+greater is the smallest number $k$ such that $m/2^k = 1$, which gives
+$k = \log_2 m$.  
+
+Compare this with the \texttt{while} loop
+implementation in the previous section, which could take $m$
+steps. This is a big difference for large $m$; note that the $\log$
+base $2$ of one trillion is only about $40$.  Many of you are probably
+familiar with the term ``Gigahertz'' corresponding to the speed of the
+CPU in your computer.  This, roughly, corresponds to the number of
+instructions your computer can execute in one second, with 1GHz
+meaning one billion instructions per second (this isn't {\em quite}
+what it means, but it's a good enough approximation for this
+discussion).  Thus, the
+\texttt{while} loop implementation for $m$ being one trillion on a
+1GHz machine would
+take at least $1000$ seconds, which is a bit over $16$ minutes. In
+fact, it
+would take even more time since some instructions take longer, and
+some steps which are just one line in Python actually correspond to
+multiple
+instructions when you translate to machine language.  Meanwhile, the
+binary search implementation would execute almost
+instantaneously. From now on in the class, this will be our focus when
+studying {\em algorithms}: finding ways of implementing functions
+such that they run quickly.  Note that the \texttt{while} loop and
+binary search implementations in this section both give the right
+answer, but the latter is vastly superior when it comes to running
+time.
+
+\end{document}

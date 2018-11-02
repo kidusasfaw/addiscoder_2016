@@ -1,0 +1,62 @@
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    2
+    1
+    0
+  output: |
+    [[0,1],[1,0]]
+  is_secret: false
+
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    2
+    
+    0
+  output: |
+    [[0,0],[1,0]]
+  is_secret: false
+
+- point_value: 10
+  timeout_milliseconds: 2000
+  input: |
+    3
+    1
+    2
+    
+  output: |
+    [[0,1,0],[0,0,1],[0,0,0]]
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 2000
+  input: |
+    3
+    1
+    2
+    0
+  output: |
+    [[0,1,0],[0,0,1],[1,0,0]]
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 2000
+  input: |
+    3
+    
+    
+    
+  output: |
+    [[0,0,0],[0,0,0],[0,0,0]]
+  is_secret: true
+  
+- point_value: 50
+  timeout_milliseconds: 2000
+  input: |
+    4
+    1 2 3
+    2
+  output: |
+    [[0,1,1,1], [0,0,1,0], [0,0,0,0], [0,0,0,0]]
+  is_secret: true

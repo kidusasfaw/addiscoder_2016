@@ -1,0 +1,328 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb,color}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newcommand{\ans}[1]{\textcolor{red}{#1}}
+
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\title{Final Exam\\Algorithms and Programming for High Schoolers
+  (AddisCoder)}
+\date{}
+
+\maketitle
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Problem & Score & Max Score\\
+\hline
+1 & & 23\\
+\hline
+2 & & 11\\
+\hline
+3 & & 11\\
+\hline
+4 & & 11\\
+\hline
+5 & & 11\\
+\hline
+6 & & 11\\
+\hline
+7 & & 11\\
+\hline
+8 & & 11\\
+\hline
+\hline
+Total & & 100\\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip
+
+\begin{center}
+\begin{tabular}{ll}
+Name:\\
+\\
+Contact (e-mail address or phone number):
+\end{tabular}
+\end{center}
+
+\newpage
+
+\noindent Name:
+
+\paragraph{Question 1:}
+Imagine evaluating the following expressions in order in the Python
+interpeter.  For each expression in red, write
+down what the
+expression would evaluate to in the space below.  If the expression
+would cause an error in Python, then write Error.  Each answer is
+worth 1 point.
+
+\begin{itemize}
+\item[$>>>$]\texttt{x = 5}
+\item[$>>>$]\texttt{y = 7}
+\item[$>>>$]\texttt{z = 2}
+\item[$>>>$]\ans{\texttt{y / x - z}}
+\item[]
+\item[$>>>$]\ans{\texttt{(y / x) - z}}
+\item[]
+\item[$>>>$]\ans{\texttt{y / (x - z)}}
+\item[]
+\item[$>>>$]\ans{\texttt{y \% (x - z)}}
+\item[]
+\item[$>>>$]\ans{\texttt{y \% x}}
+\item[]
+\item[$>>>$]\ans{\texttt{[[[]]][0]}}
+\item[]
+\item[$>>>$]\ans{\texttt{len([[1,[2,[3]]],[4],[5]])}}
+\item[]
+\item[$>>>$]\ans{\texttt{len([[1,[2,[3]]],[4],[5]][0])}}
+\item[]
+\item[$>>>$]\texttt{L = [[1,[2,[3]]],[4],[5]]}
+\end{itemize}
+
+\noindent Name:
+
+\begin{itemize}
+\item[$>>>$]\ans{\texttt{L + L[0]}}
+\item[]
+\item[$>>>$]\ans{\texttt{L + L[0][0]}}
+\item[]
+\item[$>>>$]\ans{\texttt{`Ethiopia'[3]}}
+\item[]
+\item[$>>>$]\ans{\texttt{`Ethiopia'[3][0][0][:]}}
+\item[]
+\item[$>>>$]\ans{\texttt{`abcd'[:2]}}
+\item[]
+\item[$>>>$]\ans{\texttt{`abcd'[2:]}}
+\item[]
+\item[$>>>$]\ans{\texttt{`abcd'[1:2]}}
+\item[]
+\item[$>>>$]\ans{\texttt{int(`2')}}
+\item[]
+\item[$>>>$] \texttt{w = n + 1}
+\item[$>>>$] \ans{\texttt{w}}
+\item[]
+\item[$>>>$] \texttt{y = []}
+\item[$>>>$] \texttt{w = 10}
+\item[$>>>$] \texttt{while w > 0:}
+\item[$>>>$] \ \ \ \ \texttt{y += [[w]]}
+\end{itemize}
+
+\noindent Name:
+
+\begin{itemize}
+\item[$>>>$] \ \ \ \ \texttt{w /= 2}
+\item[$>>>$] \ans{\texttt{y}}
+\item[]
+\item[$>>>$] \texttt{def fibonacci(n):}
+\item[$>>>$] \ \ \ \ \texttt{if n < 2: return 1}
+\item[$>>>$] \ \ \ \ \texttt{return fibonacci(n-1) + n - 2}
+\item[$>>>$]\ans{\texttt{fibonacci(-2)}}
+\item[]
+\item[$>>>$]\ans{\texttt{fibonacci(4)}}
+\item[]
+\item[$>>>$]\ans{\texttt{fibonacci(5)}}
+\item[]
+\item[$>>>$]\ans{\texttt{[] != [[]]}}
+\item[]
+\item[$>>>$]\texttt{x = 7}
+\item[$>>>$]\texttt{x \%= 2}
+\item[$>>>$]\ans{\texttt{x}}
+\end{itemize}
+
+\newpage
+
+\noindent Name:
+
+\paragraph{Question 2:}
+Write a function \texttt{countZeroes}(n) which takes as input a
+positive
+\texttt{int} n and outputs the number of zeroes in n.  For example,
+\texttt{countZeroes}(10) is $1$, \texttt{countZeroes}(50803) is $2$,
+and \texttt{countZeroes}(547) is $0$. What is the running time of
+your algorithm in terms of the number of digits $D$ in $n$?
+
+\newpage
+
+\noindent Name:
+
+\paragraph{Question 3:}
+You are given a \texttt{list} of pairs \texttt{L = [[$x_0$,$y_0$],
+  [$x_1,y_1$], $\ldots$, [$x_{n-1}$,$y_{n-1}$]]} such that $y_i =
+x_{i+1}$ for all $0\le i \le n-2$.  When you combine adjacent pairs
+\texttt{$[x_i,y_i]$} and \texttt{$[x_{i+1},y_{i+1}]$} (recall
+\texttt{$y_i = x_{i+1}$}), the new pair
+\texttt{$[x_i,y_{i+1}]$} takes their place in the \texttt{list}.
+Combining this pair has cost $x_i\times y_i
+\times y_{i+1}$.  You need to keep combining adjacent pairs until
+you're finally left with the single pair \texttt{$[x_0,y_{n-1}]$}, but
+you can choose the order in which you combine adjacent pairs.
+Write a function \texttt{bestCost(L)} which calculates the minimum
+cost of how to do this. 
+What is your running time? (Justify your answer.)
+
+For example, consider the input \texttt{L = [[1,5],[5,3],[3,7]]}. If
+you first combine \texttt{[1,5]} and \texttt{[5,3]}, the cost is
+$1\times 5\times 3 = 15$.  Then you are left with the \texttt{list}
+\texttt{[[1,3],[3,7]]}, and combining these two has cost $1\times
+3\times 7 = 21$.  Thus the total cost is $15 + 21 = 36$.  The other
+option is to first combine \texttt{[5,3]} and \texttt{[3,7]}, for a
+cost of $5\times 3\times 7 = 105$, producing the new pair
+\texttt{[5,7]}.  The list is then \texttt{[[1,5],[5,7]]}, and
+combining these has cost $1\times 5\times 7 = 35$, for a total cost of
+$105 + 35 = 140$.  Thus, the first option was better, and
+\texttt{bestCost([[1,5],[5,3],[3,7]])} should return $36$.
+
+\newpage
+\noindent Name:
+\newpage
+
+\noindent Name:
+
+\paragraph{Question 4:}
+You are given a chessboard which has $n$ rows and $m$ columns.  The
+bottom-left square is $(0,0)$, and the top-right is $(n-1,m-1)$.  
+You want to get your piece from the bottom-left to
+the top-right.  If your piece is at $(x,y)$, the next step it can
+either move to $(x+1,y)$, $(x+1,y+1)$, or $(x,y+1)$, as long as the
+piece stays on the board.
+There is one catch though.  Squares on your chessboard
+are either green or red, and on odd moves (your first, third, fifth,
+etc.\ moves) you can only move to red
+squares, and on even moves you can only move to green squares.  If
+ever you can't make a move because all squares
+next to you are the wrong color, then your piece dies.
+
+Write a function \texttt{isPossible(n,m,colors)} which returns
+\texttt{True} if it is possible to get from the
+bottom-left to the top-right corner without dying and \texttt{False}
+otherwise.
+Also, before writing the code, describe in words how your solution
+works: your description should not take more than  a couple sentences.
+\texttt{colors} is a
+\texttt{list} of $n$ strings each of length $m$.
+\texttt{colors[i][j]} is \texttt{`R'} if square $(i,j)$ is red, and
+otherwise is \texttt{`G'}.  For example,
+\texttt{isPossible(3,3,[`GGG',`RRG',`GGG'])} gives \texttt{True}. The
+board is
+\begin{center}
+\begin{tabular}{ccc}
+G&G&G\\
+R&R&G\\
+G&G&G
+\end{tabular}
+\end{center}
+
+\newpage
+\noindent Name:
+\newpage
+
+\noindent Name:
+
+\paragraph{Question 5:}
+Describe an algorithm that does the following.  You are given an
+integer $n\ge 2$ and must return the index $i$ of the first Fibonacci
+number which is larger than $n$.  Recall the Fibonacci numbers are
+$F_0,F_1,F_2,F_3,\ldots = 1,1,2,3,\ldots$ (each number is
+the sum
+of the previous two).  So, if $n=7$, then the answer should be $5$:
+the first Fibonacci number larger than $7$ is $F_5 = 8$.  If $n=2$,
+then the answer should be $3$, since the third Fibonacci number $F_3 =
+3$ is the first Fibonacci
+number to be larger than $2$.
+
+You don't need to implement your solution, but you should describe how
+you would do it and also explain the running time assuming that all
+arithmetic operations take $O(1)$ time.
+
+\newpage
+
+\noindent Name:
+
+\paragraph{Question 6:}
+You are given a \texttt{list} \texttt{L} of \texttt{int}s that are all
+bigger than $1$.  Write a function \texttt{findPair(L)} that returns a
+list \texttt{[a,b]} such that $a^2 = b$ and \texttt{a}, \texttt{b} are
+both in \texttt{L}.  If no such pair exists, return \texttt{[]}.  For
+example, \texttt{findPair([9,5,2,7,3])} should return \texttt{[3,9]}.
+\texttt{findPair([5,2,25,4])} can either return \texttt{[2,4]} or
+\texttt{[5,25]}.  \texttt{findPair([9,12,14])} should return
+\texttt{[]}.  
+
+\newpage
+
+\noindent Name:
+
+\paragraph{Question 7:}  
+Given a directed graph where each edge has a
+length, describe an algorithm that takes as input two vertices $u,v$
+and an integer $k\ge 0$ and outputs the length of the shortest path
+from $u$ to $v$ which takes {\em exactly} $k$ steps.  The path is
+allowed to visit vertices multiple times (for example, the path
+$1\rightarrow 3\rightarrow 2\rightarrow 3\rightarrow 7$ is a valid
+path from $1$ to $7$ of length $4$, even though it visits vertex $3$
+twice).  
+Furthermore, on odd moves (the first, third, fifth, etc.\ moves), you
+must take the edge out of your current location which is the longest
+(assume that no two edges have the same length).
+What is the running time of your algorithm?  You do not have
+to write the code for it.
+
+\newpage
+
+\noindent Name:
+
+\paragraph{Question 8:}
+We've discussed making change using the least number of coins
+possible.  What if we want to count how many different ways there are
+of making change?  
+Furthermore, we want to count the number of different ways of making
+change when we're only allowed to use an {\em even number of each coin
+  type}.
+For example, if the coins we have available are
+\texttt{[1,5,10,25]} cents and we want to make change for 12 cents, there are 2
+ways: (1) give twelve 1-cent pieces,  and (2) give two 5-cent pieces and
+two 1-cent pieces.  The other ways would involve giving an odd number
+of some coin, so we can't do it.
+
+Write a function \texttt{change(L,n)} which outputs the number of
+ways to make change for n cents when the coin denominations available
+are those in L.  For example, \texttt{change([1,5,10,25], 12)} should
+return $2$.  What is the running time of your solution?  
+
+\newpage
+
+\noindent Name:
+
+\end{document}

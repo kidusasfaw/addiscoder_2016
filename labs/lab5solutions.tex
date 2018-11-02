@@ -1,0 +1,279 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+\usepackage[usenames]{color}
+\newcommand{\ans}[1]{\textcolor{red}{#1}}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Sports Academy \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{2016}{Lab 5 Solutions}
+
+\paragraph{Exercise 1:}
+Consider the recursive \texttt{makeChange} implementation in the
+lecture notes, without memoization:
+
+\begin{verbatim}
+# if we can't make change for n cents using L, returns -2
+def makeChange(n, L):
+    if n==0:
+        return 0
+    # if possible to make change for n, the answer is definitely less
+    # than n + 1
+    answer = n + 1
+    for x in L:
+        if x <= n:
+            val = makeChange(n-x, L)
+            if val != -2:
+                answer = min(answer, 1 + val)
+    if answer == n + 1:
+        answer = -2
+    return answer
+\end{verbatim}
+
+What's the running time of this function in terms of $n$ when L is
+the list [1,2]?
+
+\medskip
+
+\textbf{Hint:} You've already figured out the answer
+to this in a previous lab.
+
+\medskip
+
+\ans{Answer: $O(((1+\sqrt{5})/2)^n)$}.  The recurrence for the running time is
+exactly the same in the case as it is for the recursive implementation
+of the \texttt{fibonacci} function ($T(n) = T(n-1) + T(n-2)$ for $n\ge
+2$).
+
+\paragraph{Exercise 2:}
+Modify the memoized \texttt{makeChange} implementation so that it
+doesn't just tell you the minimum number of coins that are needed to
+make change, but instead it returns a list of {\em which} coins you
+should use to make change using the fewest number of coins.
+
+\paragraph{Example solution:}
+\begin{verbatim}
+def memMakeChange(n, L, mem, mem2):
+    if n==0:
+        return 0
+    elif mem[n] != -1:
+        return mem[n]
+    mem[n] = n
+    for coin in L:
+        if coin <= n:
+            val = memMakeChange(n-coin, L, mem, mem2)
+            if val+1 < mem[n]:
+                mem[n] = val+1
+                mem2[n] = coin
+    return mem[n]
+
+# mem[n] is the minimum number of coins to make change for n
+# mem2[n] is one coin you can take as part of the optimal solution for n
+def makeChange(n, L):
+    mem = [-1]*(n+1)
+    mem2 = [-1]*(n+1)
+    memMakeChange(n, L, mem, mem2)
+    answer = []
+    while n > 0:
+        answer += [mem2[n]]
+        n -= mem2[n]
+    return answer
+\end{verbatim}
+
+\paragraph{Exercise 3:}
+Write a function \texttt{lis}(L) which takes as input a list of
+integers L and outputs the length of the longest increasing
+subsequence (lis) of L.  A subsequence of L is a sublist of L that
+does not have to be contiguous.  For example, [1, 5, 9] is a
+subsequence of the list L = [1,2,3,4,5,6,7,8,9] since 1,5,9 appear in
+the list L in the same order (though just not in a row).  9,5,1 is not
+a subsequence of L since it does not appear in L in that order.
+
+Your implementation should run in time $O(m^2)$ where the size of L is
+$m$.  \textbf{Bonus (try at the end):} See if you can find a way to
+solve the problem in $O(m\log m)$ time.
+
+\paragraph{Example solution:}
+Here is a solution running in time $\Theta(m^2)$. The basic idea is
+to let $f(\mathrm{last}, \mathrm{at})$ be the length of the longest
+increasing
+subsequence where the first number must be larger than L[last] and
+you're only allowed to use the numbers L[at],L[at+1],$\ldots$.  Then,
+$f$ can be computed recursively, and the answer is $f(i, i+1)$ for
+some $i$ (since the sequence has to start with {\em some} value L[i]),
+so the best choice over all $i$ should be returned.
+Memoization is used to make it faster.
+
+\begin{verbatim}
+def memlis(L, last, at, mem):
+    if at==len(L):
+        return 0
+    elif mem[last][at]!=-1:
+        return mem[last][at]
+    mem[last][at] = memlis(L, last, at+1, mem)
+    if L[at]>L[last]:
+        mem[last][at] = max(mem[last][at], 1 + memlis(L, at, at+1, mem))
+    return mem[last][at]
+
+def lis(L):
+    mem = []
+    for i in xrange(len(L)):
+        mem += [[-1]*len(L)]
+    answer = 0
+    for i in xrange(len(L)):
+        answer = max(answer, 1 + memlis(L, i, i+1, mem))
+    return answer
+\end{verbatim}
+
+\paragraph{Exercise 4:}
+(taken from http://people.csail.mit.edu/bdean/6.046/dp/)
+
+\medskip
+
+You are given a list of boxes, each having some height, width, and
+depth.  You want to stack boxes to make the tallest stack possible,
+where you can only put one box on top of the other if its base has
+strictly smaller length and width than the box immediately underneath
+it.  Given a list L of boxes of the form L = [[width1, height1,
+depth1], [width2, height2, depth2], $\ldots$, [widthm, heightm,
+depthm]], implement a function \texttt{boxes}(L) which returns the
+height of the tallest stack you can possibly make using the given
+boxes.  You do not have to use all the boxes given to you, and you can
+use the same box multiple times.
+
+\paragraph{Example solution:}
+\begin{verbatim}
+# L is given in decreasing order of base area, and memoize(L, at, last, mem)
+# is the tallest stack we can make using only the boxes L[at],L[at+1],...
+# where the last box we used was L[last]
+def memoize(L, at, last, mem):
+    if at==len(L):
+        return 0
+    elif mem[at][last] != -1:
+        return mem[at][last]
+    mem[at][last] = memoize(L, at+1, last, mem)
+    if L[at][0]<L[last][0] and L[at][1]<L[last][1]:
+        mem[at][last] = max(mem[at][last], L[at][2] + memoize(L, at+1, at, mem))
+    return mem[at][last]
+
+def boxes(L):
+    T = []
+    # put all 6 rotations of each box in a list
+    for box in L:
+        a1 = [box[0]*box[1], box[0], box[1], box[2]]
+        a2 = [box[0]*box[1], box[1], box[0], box[2]]
+        b1 = [box[0]*box[2], box[0], box[2], box[1]]
+        b2 = [box[0]*box[2], box[2], box[0], box[1]]
+        c1 = [box[1]*box[2], box[1], box[2], box[0]]
+        c2 = [box[1]*box[2], box[2], box[1], box[0]]
+        T += [a1, a2, b1, b2, c1, c2]
+    # sort the list in decreasing order of base area
+    T.sort()
+    T.reverse()
+    L = []
+    for x in T:
+        L += [[x[1], x[2], x[3]]]
+    mem = []
+    for i in xrange(len(L)):
+        mem += [[-1]*len(L)]
+    ans = 0
+    # try all possibilities for the box at the very bottom and
+    # take the best one
+    for i in xrange(len(L)):
+        ans = max(ans, L[i][2] + memoize(L, i+1, i, mem))
+    return ans
+\end{verbatim}
+
+\paragraph{Exercise 5:}
+In the {\em knapsack} problem we assume we have a bag that can hold
+some $n$ liters of volume, and we want to pack the bag with the most
+valuable combination of items possible out of some given list of
+items.  Implement a function
+\texttt{knapsack}(n, L) which takes as input this bag volume n, and a
+list of items L, and returns the maximum value you can pack in the
+bag.  L is a list of lists, where each list in L is of size 2
+containing the volume of the item as its 0th element, and its volume
+as its 1st element.  For example, L = [[7, 10], [5, 6], [4, 5]]
+represents a list of 3 items.  The first item takes 7 liters and is
+worth 10 dollars, the second item takes 5 liters and is worth 6
+dollars, and the last item takes 4 liters and is worth 5 dollars.
+\texttt{knapsack}(10, [[7, 10], [5, 6], [4, 5]]) should return $11$
+since the best thing to do is to take the and and third item (which
+both fit, since their total volume is $5+4=9$ liters, and we can fit
+10 liters).
+
+Your implementation should run in time $O(nm)$ where the size of L is
+$m$.
+
+\paragraph{Example solution:}
+The basic idea is to let $f(\mathrm{n}, \mathrm{at})$ be the most
+value you can get in a bag of size $n$ using only the items
+L[at],L[at+1],$\ldots$.  $f$ can be computed recursively, and
+memoization makes it faster.  Then the answer we finally want is $f(n,
+0)$.
+
+\begin{verbatim}
+def memKnapsack(L, n, at, mem):
+    if at==len(L):
+        return 0
+    elif mem[n][at]!=-1:
+        return mem[n][at]
+    mem[n][at] = memKnapsack(L, n, at+1, mem)
+    if L[at][0]<=n:
+        mem[n][at] = max(mem[n][at], L[at][1] + memKnapsack(L, n-L[at][0], at+1, mem))
+    return mem[n][at]    
+
+def knapsack(n, L):
+    mem = []
+    for i in xrange(n+1):
+        mem += [[-1]*len(L)]
+    return memKnapsack(L, n, 0, mem)
+\end{verbatim}
+
+\end{document}

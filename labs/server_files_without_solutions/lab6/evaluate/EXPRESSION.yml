@@ -1,0 +1,183 @@
+- point_value: 0
+  timeout_milliseconds: 150
+  input: |
+    (+ 1 5)
+  output: |
+    6
+  is_secret: false
+
+- point_value: 0
+  timeout_milliseconds: 150
+  input: |
+    (* 3 (- 5 2))
+  output: |
+    9
+  is_secret: false
+
+- point_value: 0
+  timeout_milliseconds: 150
+  input: |
+    (+ 1 (+ 5))
+  output: |
+    INVALID
+  is_secret: false
+
+- point_value: 0
+  timeout_milliseconds: 150
+  input: |
+    ()
+  output: |
+    INVALID
+  is_secret: false
+
+- point_value: 1
+  timeout_milliseconds: 150
+  input: |
+    ()
+  output: |
+    INVALID
+  is_secret: true
+
+- point_value: 1
+  timeout_milliseconds: 150
+  input: |
+    (+ 32747 56506)
+  output: |
+    89253
+  is_secret: true
+
+- point_value: 1
+  timeout_milliseconds: 150
+  input: |
+    (* 23728 1426)
+  output: |
+    33836128
+  is_secret: true
+
+- point_value: 1
+  timeout_milliseconds: 150
+  input: |
+    (- 13103 59987)
+  output: |
+    -46884
+  is_secret: true
+
+- point_value: 1
+  timeout_milliseconds: 150
+  input: |
+    (- 71765 90633 4811)
+  output: |
+    INVALID
+  is_secret: true
+
+- point_value: 1
+  timeout_milliseconds: 150
+  input: |
+    + 99481 16631)
+  output: |
+    INVALID
+  is_secret: true
+
+- point_value: 1
+  timeout_milliseconds: 150
+  input: |
+    (* 12035 12720
+  output: |
+    INVALID
+  is_secret: true
+
+- point_value: 1
+  timeout_milliseconds: 150
+  input: |
+    (+ * 99481 16631)
+  output: |
+    INVALID
+  is_secret: true
+
+- point_value: 1
+  timeout_milliseconds: 150
+  input: |
+    (99481 - 16631)
+  output: |
+    INVALID
+  is_secret: true
+
+- point_value: 1
+  timeout_milliseconds: 150
+  input: |
+    (+ (* (+ 4 2) (- 5 2)) 2)
+  output: |
+    20
+  is_secret: true
+
+- point_value: 5
+  timeout_milliseconds: 150
+  input: |
+    (+ (* (+ 279 74) (- 615 358)) (991))
+  output: |
+    91712
+  is_secret: true
+
+- point_value: 5
+  timeout_milliseconds: 150
+  input: |
+    (* (- (+ 636 426) (+ 317 428)) (* 991 (- 192 533)))
+  output: |
+    -107124127
+  is_secret: true
+
+- point_value: 5
+  timeout_milliseconds: 150
+  input: |
+    (* (+ (* 432 89) (- 368 167)) (* (- 410 211) (+ 243 455)))
+  output: |
+    5368423398
+  is_secret: true
+
+- point_value: 5
+  timeout_milliseconds: 150
+  input: |
+    (* (+ (* 432 89) (- 368 167)) (* (- 410 211) (+ 243 (+ () 4))))
+  output: |
+    INVALID
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 150
+  input: |
+    (* (+ (+ (* (* (- (- (+ (+ (* 10 5) 8) 3) 2) 6) 10) 1) 4) 1) 5)
+  output: |
+    2675
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 150
+  input: |
+    (* (+ (+ (* (* (- (- (+ (+ (* 10 5) 8) (* 3 3)) 2) (* 6 10)) 10) 1) 4) 1) 5)
+  output: |
+    275
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 150
+  input: |
+    (* (+ (+ (* (* (- (- (+ (+ (* 10 (+ (* (* (- ()))))) 8) (* 3 3)) 2) (* 6 10)) 10) 1) 4) 1) 5)
+  output: |
+    INVALID
+  is_secret: true
+
+- point_value: 20
+  timeout_milliseconds: 150
+  input: |
+    (* (+ (+ (* (+ 30 55) (* (- (- (+ (+ (* 10 5) 8) (* 3 3)) 2) (* 42 10)) 10)) 4) (+ 49 60)) (- 29 5))
+  output: |
+    -7239288
+  is_secret: true
+
+- point_value: 20
+  timeout_milliseconds: 150
+  input: |
+    (* (+ (+ (- (* 0 3) 45) (* (+ 30 55) (* (- (- (+ (+ (* 10 5) 8) (* 27 (+ 99 46))) 24) (* 42 10)) 95))) (+ 49 60)) (- (- 24 29) 5))
+  output: |
+    -284967390
+  is_secret: true

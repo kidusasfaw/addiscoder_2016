@@ -1,0 +1,37 @@
+* for solve1, return True or False depending on whether there's a solution
+* what is wrong with the following code?
+
+  # returns the sum x+y, where x and y are both nonnegative
+  def add(x, y):
+      # HERE
+      return 1 + add(x, y-1)
+
+  How would you fix it by replacing "# HERE" with some code?
+  YOU ARE NOT ALLOWED TO USE +
+* use recursion to implement a function multiplyAll, which returns
+  the product of all numbers in an input list L
+
+  def multiplyAll(L):
+      # write the code here
+
+  # examples:
+
+  # multiplyAll([1,2,3])
+  # answer: 6
+
+  # multiplyAll([4,0,2])
+  # answer: 0
+
+  # multiplyAll([1, 1, 1, 1, 1, 1])
+  # answer: 1
+* write function is_sorted(L)
+* given sort10, write sort11 using the selection sort algorithm
+* given sort10 and merge_lists, write sort20 using the merge sort algorithm
+* given solve2, write a function that solves 3 vars, 3 eqns, each eqn is
+  given in the format e.g. [[10,20], [10,50]] meaning 10x + 20y = 10 + 50z
+* suppose $n$ is about a billion (1,000,000,000) which of these numbers is closer to the number of steps that solve will make on n equations with n variables
+a. n
+b. n^2
+c. n^3
+d. n^4
+Explain your selection.

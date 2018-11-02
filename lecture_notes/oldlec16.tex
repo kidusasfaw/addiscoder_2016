@@ -1,0 +1,274 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+\usepackage{pgf}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Addis Ababa University, Amist Kilo \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{July 26, 2011}{Lecture 16}
+
+More practice problems!
+
+\paragraph{Nested brackets:}
+Consider the following lists: [], [[]], [[[]]], [[[[]]]], etc.  The
+first is the empty list, the second is a list containing the empty
+list, the third is a list containing a list that contains the empty
+list, etc.  We say that the first list in this sequence has nesting
+level zero, and the second has nesting level 1, etc.  Write a function
+which takes in the nesting level n and outputs the appropriate list.
+
+\paragraph{Example solutions:}
+With recursion:
+
+\begin{verbatim}
+def nest(n):
+    if n == 0:
+        return []
+    return [nest(n-1)]
+\end{verbatim}
+
+Iteratively:
+
+\begin{verbatim}
+def nest(n):
+    ans = []
+    for i in xrange(n):
+        ans = [ans]
+    return ans
+\end{verbatim}
+
+\paragraph{Multidimensional arrays:}
+In many programming languages, there exists a data type called
+an {\em array} (this data type exists in Python as well, though we
+haven't discussed it). A one-dimensional array is similar to a Python
+\texttt{list}, though you must set its size in the beginning and later cannot
+shrink or increase its size.  An $n$-dimensional array $A$ is such
+that $A[i]$ is an $(n-1)$-dimensional array for each $i$ within the
+bounds of the size of $A$.  In other words, it is like a nested
+\texttt{list} of \texttt{list}s, $n$ deep, where each list has equal
+size.
+
+Often times in this course, especially when doing memoization, we have
+had to create a \texttt{list} of \texttt{list}s.  For example, the
+\texttt{mem} variable in our memoization examples usually has been a
+\texttt{list} of $n$ lists, each starting off to contain $m$ $-1$'s.
+We usually create such a \texttt{list} as:
+
+\begin{verbatim}
+mem = []
+for i in xrange(n):
+    mem += [[-1]*m]
+\end{verbatim}
+
+Then we can access the $j$th entry of the $i$th list as
+\texttt{mem}[i][j].  What if we wanted to store our data not
+two-dimensionally, but $n$-dimensionally?  For example, for $n=3$,
+what if we wanted a \texttt{list} of $n$ \texttt{list} of $m$
+\texttt{list}s, each of size $r$, so that we could then look at
+values \texttt{mem}[i][j][k]?  Write a function \texttt{makeArray}
+that takes a list \texttt{L} of the dimensions of the matrix we want,
+together
+with a value \texttt{val}, and outputs nested \texttt{list}s, where
+the bottom-most \texttt{list}s in the nesting have all their entries
+set to \texttt{val}.
+
+For example, \texttt{makeArray}([2, 3], -1) should return [[-1, -1,
+-1], [-1, -1, -1]] (a \texttt{list} of $2$ \texttt{list}s, each of
+size $3$, where all the starting values are $-1$).
+
+\paragraph{Example solution:}
+\begin{verbatim}
+def makeArray(L, val):
+    if len(L) == 1:
+        return [[val]*L[0]]
+    ans = []
+    for i in xrange(L[0]):
+        ans += [makeArray(L[1:], val)]
+    return ans
+\end{verbatim}
+
+% \paragraph{Minimum mean-weight cycle:}
+% Given a directed graph, a cycle is a path that starts and ends at the
+% same vertex.  If the edges of the graph have weights, how can we find
+% a cycle whose {\em average} weight of edges on the cycle is minimum?
+
+% The idea is to use an approach similar to Bellman-Ford.  We let
+% f[u][v][k] be the length of the shortest path from u to v using
+% exactly k edges.  Then the answer is $\min_{u\in V,2\le k\le n}
+% f[u][u][k]/k$.  Code implementing the solution is below.  Its running
+% time is $\Theta(n^2(n + m))$.
+
+% \begin{verbatim}
+% # returns length of shortest path from x to y using exactly t steps
+% def cycleHelper(B, x, y, t, mem, seen):
+%     if t == 0:
+%         if x == y:
+%             return 0
+%         return float(`infinity')
+%     elif seen[y][t]:
+%         return mem[y][t]
+
+%     seen[y][t] = True
+%     ans = float(`infinity')
+
+%     # go to a vertex z that has an edge to y first, in exactly t-1
+%     # steps, then take the edge (z, y)
+%     for p in B[y]:
+%         z = p[0]
+%         weight = p[1]
+%         val = cycleHelper(B, x, z, t-1, mem, seen)
+%         ans = min(ans, weight + val)
+  
+%     mem[y][t] = ans
+%     return ans
+
+% # A is the adjacency list of the graph
+% # A[u][i][0] is the ith neighbor of vertex u, and A[u][i][1] is the
+% # weight of the edge (u, A[u][i][0])
+% #
+% # returns the cost of the minimum average weight cycle
+% def minWeightCycle(A, x):
+%     # mem[i][j][k] is float(`infinity') if we can't get from i to j in
+%     # exactly k steps. Otherwise, it's the length of the shortest path
+%     # from i to j taking exactly k steps.
+%     mem = makeArray([len(A), len(A), len(A) + 1], -1)
+
+%     # seen[i][j][k] is True if we've already filled in mem[i][j][k]
+%     # and is False otherwise
+%     seen = makeArray([len(A), len(A), len(A) + 1], False)
+
+%     # B is an inverse adjacency list.  B[i] is a list of all vertices
+%     # j such that (j, i) is an edge, plus the weight of the edge
+%     B = []
+%     for i in xrange(len(A)):
+%         B += [[]]
+%     for i in xrange(len(A)):
+%         for p in A[i]:
+%             # p is the pair [j, weight(i, j)]
+%             B[p[0]] += [[i, p[1]]]
+
+%     ans = float(`infinity')
+%     for u in xrange(len(A)):
+%         for k in xrange(2, len(A) + 1):
+%             ans = min(ans, 1.*cycleHelper(B, u, u, k, mem, seen) / k)
+%     return ans
+% \end{verbatim}
+
+% It is also possible to solve this problem in $\Theta(nm)$ time, though
+% we will not discuss it today.
+
+\paragraph{Min cost bitonic tour:}
+We have a bunch of points in the plane:
+[[$x_0,y_0$],$\ldots$,[$x_{n-1},y_{n-1}$]].  We would like to start at
+the $0$th point, visit all other points exactly once, then return to
+the $0$th point.  We would like to do this while spending the least
+amount of time traveling as possible with one constraint: we have to
+do our travels west to east, then head back west again.  That is, we
+can't zig-zag (we can't go east, then west, then back east again, then
+back west again).  $x_0$ is the smallest amongst all the $x_i$, so the
+$0$th point is the westernmost point.  Also, $x_{n-1}$ is the largest
+amongst the $x_i$, so it is the easternmost point.  This is known as
+the minimum cost bitonic tour problem.
+
+We can solve this problem using dynamic programming.  The optimal path
+goes east, possibly skipping some points along
+the way, lands at $x_{n-1}$, then heads back west again, finally
+ending back at $x_0$.  Let's instead think about our optimal path just
+going east twice, by thinking about the return voyage in reverse.  So,
+the first eastward path goes $x_0\rightarrow x_{i_1} \rightarrow
+ \ldots \rightarrow x_{i_{r_1}} \rightarrow x_{n-1}$.  The return voyage,
+in reverse, goes $x_0\rightarrow x_{j_1}\rightarrow \ldots \rightarrow
+x_{j_{r_2}} \rightarrow x_{n-1}$.  We should not have any repeats
+amongst the $x_i$ and $x_j$, and also we should have $r_1 + r_2 = n-2$
+(we should visit all the points).
+
+\paragraph{Example solution:}
+\begin{verbatim}
+import math
+
+def distance(x, y):
+    dx = x[0] - y[0]
+    dy = x[1] - y[1]
+    return math.sqrt(dx*dx + dy*dy)
+
+def recurse(L, at1, at2, mem):
+    if at1+1==len(L) and at2+1==len(L):
+        return 0
+    elif mem[at1][at2] != -1:
+        return mem[at1][at]
+    ans = float(`infinity')
+    if at2 <= at1 + 1:
+        for i in xrange(at2 + 1, len(L)):
+            ans = min(ans, distance(L[at1], L[i]) + recurse(L, at2, i, mem))
+    else:
+        ans = recurse(L, at1 + 1, at2, mem)
+    mem[at1][at2] = ans
+    return ans
+    
+# We assume the points are already sorted from west to east, i.e. by
+# their x coordinate. We also assume all x coordinates are unique.
+def bitonicTour(L):
+   mem = makeArray([len(A), len(A)], -1)
+   return recurse(L, 0, 0, mem)
+\end{verbatim}
+
+The running time is $\Theta(n^2)$.  
+There are $\Theta(n^2)$ possibilities for $a,b$, and only for $O(n)$ of these possibilities do we actually have to spend $\Theta(n)$ time; the rest only require $\Theta(1)$ time.
+The basic idea of the solution is
+to build both paths simultaneously from left to right.  Initially both
+parts start at the $0$th point.  Then at any given stage, suppose one
+path ends at L[at1] so far, and the other ends at L[at2], with
+$\mathrm{at1}\le\mathrm{at2}$.  Since we have to visit all points, if
+there are points between L[at1] and L[at2], then we have no choice:
+the one path has to visit L[at1+1] next.  Otherwise, if there are no
+points in between (i.e.\ at2 and at1 differ by at most $1$), then the
+path that ended at L[at1] can choose where to go next, to some point
+after L[at2], possiby skipping some number of points.  We try all
+possibilities and take the best choice.
+\end{document}

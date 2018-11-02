@@ -1,0 +1,39 @@
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    75 24 13 10
+  output: |
+    10 13 24 75
+  is_secret: false
+
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    a b c
+  output: |
+    c b a
+  is_secret: false
+
+- point_value: 30
+  timeout_milliseconds: 1000
+  input: |
+    
+  output: |
+    
+  is_secret: true
+
+- point_value: 30
+  timeout_milliseconds: 1000
+  input: |
+    abc def ghi
+  output: |
+    ghi def abc
+  is_secret: true
+
+- point_value: 20
+  timeout_milliseconds: 1000
+  input: |
+    C i v i c
+  output: |
+    c i v i C
+  is_secret: true

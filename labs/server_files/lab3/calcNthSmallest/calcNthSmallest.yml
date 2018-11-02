@@ -1,0 +1,106 @@
+- point_value: 0
+  timeout_milliseconds: 150
+  input: |
+    3
+    3
+    1 5
+    2 4
+    7 9
+  output: |
+    3
+  is_secret: false
+
+- point_value: 0
+  timeout_milliseconds: 150
+  input: |
+    2
+    3
+    1 5
+    2 4
+    7 9
+  output: |
+    2
+  is_secret: false
+
+- point_value: 10
+  timeout_milliseconds: 150
+  input: |
+    16
+    9
+    1 3
+    3 5
+    5 7
+    7 9
+    9 11
+    11 13
+    13 15
+    15 17
+    17 19
+  output: |
+    12
+  is_secret: true
+
+- point_value: 20
+  timeout_milliseconds: 150
+  input: |
+    100
+    8
+    29 84
+    190 483
+    34 37
+    238 432
+    45 67
+    890 3459
+    1235 2415
+    1 5
+  output: |
+    202
+  is_secret: true
+
+- point_value: 20
+  timeout_milliseconds: 150
+  input: |
+    445724
+    6
+    123456 234567
+    123567 434678
+    125678 225689
+    231234 234123
+    234688 234789
+    111246 111468
+  output: |
+    354952
+  is_secret: true
+
+- point_value: 20
+  timeout_milliseconds: 150
+  input: |
+    7
+    8
+    1 1
+    1 1
+    1 1
+    2 2
+    1 1
+    1 1
+    1 1
+    1 1
+  output: |
+    2
+  is_secret: true
+
+- point_value: 30
+  timeout_milliseconds: 150
+  input: |
+    1234567890
+    7
+    10234567890 24345678901
+    36456789120 47567890123
+    87765432109 91876543210
+    10234667890 19234777890
+    567 123
+    12347654379 12348754328
+    876567 3496321
+  output: |
+    10850592179
+  is_secret: true

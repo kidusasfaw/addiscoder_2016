@@ -1,0 +1,119 @@
+- point_value: 0
+  timeout_milliseconds: 120
+  input: |
+    60
+  output: |
+    0:1:0
+  is_secret: false
+
+- point_value: 0
+  timeout_milliseconds: 120
+  input: |
+    0
+  output: |
+    0:0:0
+  is_secret: false
+
+- point_value: 0
+  timeout_milliseconds: 120
+  input: |
+    3600
+  output: |
+    1:0:0
+  is_secret: false
+
+- point_value: 0
+  timeout_milliseconds: 120
+  input: |
+    86399
+  output: |
+    23:59:59
+  is_secret: false
+
+- point_value: 5
+  timeout_milliseconds: 120
+  input: |
+    1337
+  output: |
+    0:22:17
+  is_secret: true
+
+- point_value: 5
+  timeout_milliseconds: 120
+  input: |
+    7331
+  output: |
+    2:2:11
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    26568
+  output: |
+    7:22:48
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    74156
+  output: |
+    20:35:56
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    53357
+  output: |
+    14:49:17
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    67992
+  output: |
+    18:53:12
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    25809
+  output: |
+    7:10:9
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    80882
+  output: |
+    22:28:2
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    80882
+  output: |
+    22:28:2
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    85476
+  output: |
+    23:44:36
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    13996
+  output: |
+    3:53:16
+  is_secret: true

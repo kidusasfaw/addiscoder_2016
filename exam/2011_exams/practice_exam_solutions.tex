@@ -1,0 +1,387 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb,color}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newcommand{\ans}[1]{\textcolor{red}{#1}}
+
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\title{Practice Exam Solutions\\Algorithms and Programming for High Schoolers
+  (AddisCoder)}
+\date{}
+
+\maketitle
+
+\paragraph{Question 1:}
+Imagine evaluating the following expressions in order in the Python
+interpeter.  For each expression written in red, write down what the
+expression would evaluate to in the space below.  If the expression
+would cause an error in Python, then write Error.
+
+\begin{itemize}
+\item[$>>>$]\texttt{x = 5}
+\item[$>>>$]\texttt{y = 7}
+\item[$>>>$]\texttt{z = 2}
+\item[$>>>$]\ans{\texttt{x * y + z}}
+\item[] 37
+\item[$>>>$]\ans{\texttt{(x * y) + z}}
+\item[] 37
+\item[$>>>$]\ans{\texttt{x * (y + z)}}
+\item[] 45
+\item[$>>>$]\ans{\texttt{x \% y}}
+\item[] 5
+\item[$>>>$]\ans{\texttt{y \% x}}
+\item[] 2
+\item[$>>>$]\ans{\texttt{[] * z}}
+\item[] \texttt{[]}
+\item[$>>>$]\ans{\texttt{[] * `2'}}
+\item[] Error. (can't multiply a \texttt{list} by a \texttt{str})
+\item[$>>>$]\ans{\texttt{[1] * z + x}}
+\item[] Error. (can't add the \texttt{list} \texttt{[1,1]} to the
+  \texttt{int} 5)
+\item[$>>>$]\ans{\texttt{str(2)}}
+\item[] \texttt{`2'}
+\item[$>>>$]\ans{\texttt{[[]][0]}}
+\item[] \texttt{[]}
+\item[$>>>$]\ans{\texttt{[[]][1]}}
+\item[] Error. The \texttt{list} \texttt{[[]]} has no $1$st element.
+\item[$>>>$]\ans{\texttt{len([[[]]])}}
+\item[] 1
+\item[$>>>$]\ans{\texttt{[[]][]}}
+\item[] Error. This is invalid Python syntax.
+\item[$>>>$] \texttt{x = [2, 3]}
+\item[$>>>$] \texttt{y = []}
+\item[$>>>$] \texttt{for i in xrange(x[0]**x[1]):}
+\item[$>>>$] \ \ \ \ \texttt{y += [i*2]}
+\item[$>>>$] \ans{\texttt{y}}
+\item[] \texttt{[0, 2, 4, 6, 8, 10, 12, 14]}
+\item[$>>>$] \texttt{def isPrime(x):}
+\item[$>>>$] \ \ \ \ \texttt{if x < 2: return False}
+\item[$>>>$] \ \ \ \ \texttt{for i in xrange(2, x):}
+\item[$>>>$] \ \ \ \ \ \ \ \ \texttt{if i*i >= x: break}
+\item[$>>>$] \ \ \ \ \ \ \ \ \texttt{if x \% i == 0: return False}
+\item[$>>>$] \ \ \ \ \texttt{return True}
+\item[$>>>$]\ans{isPrime(1)}
+\item[] \texttt{False}
+\item[$>>>$]\ans{isPrime(2)}
+\item[] \texttt{True}
+\item[$>>>$]\ans{isPrime(9)}
+\item[] \texttt{True} (to be correct the loop should break \texttt{if
+    i*i > x})
+\item[$>>>$]\ans{isPrime(12)}
+\item[] \texttt{False}
+\end{itemize}
+
+\paragraph{Question 2:}
+Consider the \texttt{list}s \texttt{[]}, \texttt{[[]]},
+\texttt{[[[]]]}, $\ldots$  The {\em depth} of such a \texttt{list} is
+the
+number of nested layers of brackets.  So, \texttt{depth([])} is $0$,
+\texttt{depth([[]])} is $1$, \texttt{depth([[[]]])} is $2$, etc.
+Write a function \texttt{depth}(L) which takes such a \texttt{list}
+and computes its depth.  What's the running time of your function in
+terms of $n$, the number of brackets in the list?
+
+\paragraph{Example solution:}
+\begin{verbatim}
+def depth(L):
+    if L == []: return 0
+    return 1 + depth(L[0])
+\end{verbatim}
+
+The running time is $\Theta(n)$.
+
+\paragraph{Question 3:}
+Consider the following code for testing whether a number is prime or
+not.
+
+\begin{verbatim}
+def isPrime(n):
+    if n < 2: return False
+    for i in xrange(2, n):
+        if n % i == 0: return False
+        return True
+\end{verbatim}
+
+What is the running time of this code as written?  Is it correct?  If
+it's not correct, suggest a minor change to the code which would make
+it correct.
+
+\paragraph{Example solution:}
+The running time of the code as written is $\Theta(1)$: the first time
+through the loop, the code returns.  In fact, as written, the code is
+incorrect: it will just return \texttt{True} if either $n=2$, or $n\ge
+3$ and $n$ is odd.  A minor change to make the code correct would be
+to indent the \texttt{return True} differently to be directly under
+the \texttt{for} loop instead of being a part of the code block of the
+\texttt{for} loop.
+
+\paragraph{Question 4:}
+Write a function \texttt{cubeRoot}(n) which takes a positive integer n
+and outputs the largest integer x such that $x^3 \le n$.
+
+\begin{itemize}
+\item[(a)] Give a solution with running time $O(n^{1/3})$.
+\item[(b)] Give a solution with running time $O(\log_2 n)$.
+\end{itemize}
+
+The running times above are assuming you can do arithmetic on integers
+up to $n$ in $O(1)$ time.
+
+\paragraph{Example solution:}
+Note that any function which is $O(\log_2 n)$ is also $O(n^{1/3})$, so it
+suffices to just give a solution with running time $O(\log_2 n)$.
+Here is such a solution using binary search:
+
+\begin{verbatim}
+# do a binary search amongst integers in [x,y] for the answer
+def binarySearch(x, y, n):
+    if x == y:
+        return x
+    # let mid be ceil((x+y)/2) (which is why we put the + 1)
+    # if you don't put the + 1, the code will run forever if y == x+1
+    # and the elif occurs (because mid will just be x again).
+    # alternatively, above you could have a separate check for y ==
+    # x+1 and handle that case separately
+    mid = (x + y + 1) / 2
+    cube = mid**3
+    if cube == n:
+        return mid
+    elif cube < n:
+        return binarySearch(mid, y, n)
+    else:
+        return binarySearch(x, mid - 1, n)
+
+def cubeRoot(n):
+    return binarySearch(0, n, n)
+\end{verbatim}
+
+It's also possible to solve just problem (a) more simply without
+binary search, just using a \texttt{while} loop.  The following code
+takes $\Theta(n^{1/3})$ time.
+
+\begin{verbatim}
+def cubeRoot(n):
+    x = 0
+    while x*x*x <= n:
+        x += 1
+    return x - 1
+\end{verbatim}
+
+\paragraph{Question 5:}
+Suppose we have a list of numbers L[0],L[1],$\ldots$,L[n-1].  An
+{\em inversion} in the list is a pair $i,j$ such that $i<j$ but
+$\mathrm{L[i]}> \mathrm{L[j]}$.  In other words, an inversion is a
+pair of indices where the larger number comes before the smaller
+number.
+
+Describe an algorithm for counting the number of inversions in a list,
+then implement your algorithm in Python as
+\texttt{countInversions}(L).  Faster running times get more points.
+Hint: The problem is solvable in $\Theta(n\log_2 n)$ time, though an
+easier solution takes $\Theta(n^2)$ time.  You get more points for
+giving a slow, correct solution than a fast, incorrect solution.
+
+\paragraph{Example solution:}
+Here is a simple implementation taking $\Theta(n^2)$ time.  We simply
+try all pairs and count the number of inversions.
+
+\begin{verbatim}
+def countInversions(L):
+    ans = 0
+    for i in xrange(0, len(L)):
+        for j in xrange(i + 1, len(L)):
+            if L[i] > L[j]:
+                ans += 1
+    return ans
+\end{verbatim}
+
+A faster solution, taking only $\Theta(n\log_2 n)$ time, is to modify
+\texttt{mergeSort}.  The basic idea is that during a \texttt{merge}
+operation, everytime the next smallest item comes from the right half
+instead of the left half, that means the element from the right half
+is inverted with respect to all the remaining items in the left half,
+so we can add that many inversions.  The code follows.
+
+\begin{verbatim}
+# merge(A, B) returns a list with two elements.  The 0th element is
+# the merged list of A,B, and the 1st element is the number of
+# inversions between elements of A and elements of B (i.e., how many
+# pairs (a,b) with a in A and b in B have a > b).
+def merge(A, B):
+    inversions = 0
+    C = []
+    atA = 0
+    atB = 0
+    for i in xrange(len(A) + len(B)):
+        if atA == len(A):
+            C += B[atB:]
+            break
+        elif atB == len(B):
+            C += A[atA:]
+            break
+        elif A[atA] < B[atB]:
+            C += [A[atA]]
+            atA += 1
+        else:
+            C += [B[atB]]
+            atB += 1
+            inversions += len(A) - atA
+    return [C, inversions]
+
+# mergeSort(L) returns a list with two elements.  The 0th element is
+L, sorted, and the 1st element is the number of inversions in L.
+def mergeSort(L):
+    A = L[:len(L)/2]
+    B = L[len(L)/2:]
+    C = mergeSort(A)
+    D = mergeSort(B)
+    E = merge(C[0], D[0])
+    return [E[0], C[1] + D[1] + E[1]]
+
+def countInversions(L):
+    return mergeSort(L)[1]
+\end{verbatim}
+
+\paragraph{Question 6:}
+We've discussed making change using the least number of coins
+possible.  What if we want to count how many different ways there are
+of making change?  For example, if the coins we have available are
+[1,5,10,25] cents and we want to make change for 12 cents, there are 4
+ways: (1) give all 1-cent pieces, (2) give a 10-cent piece and two
+1-cent pieces, (3) give two 5-cent pieces and two 1-cent pieces, and
+(4) give one 5-cent piece and seven 1-cent pieces.  So, the answer in
+this case is $4$.
+
+Write a function \texttt{change}(L, n) which outputs the number of
+ways to make change for n cents when the coin denominations available
+are those in L.  For example, \texttt{change}([1,5,10,25], 12) should
+return $4$.  What is the running time of your solution?  Faster
+running times get more points.
+
+\paragraph{Example solution:}
+The basic idea is to use recursion and memoization.  Let $f(x, n)$ be
+the number of ways to make change for $n$ cents using only the coins
+\texttt{L[x:]}.  Then,
+$$
+f(x, n) = \begin{cases} 1, \ &
+  \mathrm{if}\ n=0
+\\ 0, \
+&\mathrm{if}\ x=\mathrm{len}(L)\ \mathrm{and}\ n>0 
+\\ f(x+1, n), \ &\mathrm{if}\ x<\mathrm{len}(L)\ \mathrm{and}\ L[x]>n
+\\ f(x, n - L[x]) + f(x+1, n),\ &\mathrm{otherwise}
+\end{cases}
+$$
+
+The corresponding code is as follows.
+
+\begin{verbatim}
+def recurse(L, x, n, mem):
+    if n == 0:
+        return 1
+    elif x == len(L):
+        return 0
+    elif mem[x][n] != -1:
+        return mem[x][n]
+    mem[x][n] = recurse(L, x+1, n, mem)
+    if L[x] <= n:
+        mem[x][n] += recurse(L, x, n - L[x], mem)
+    return mem[x][n]
+
+def change(L, n):
+    mem = []
+    for i in xrange(len(L)):
+        mem += [[-1]*(n+1)]
+    return recurse(L, 0, n, mem)
+\end{verbatim}
+
+If the length of \texttt{L} is $m$, the running time is $\Theta(nm)$
+in the worst case.
+
+\paragraph{Question 7:}  Given a directed graph where each edge has a
+length, describe an algorithm that takes as input two vertices $u,v$
+and an integer $k\ge 0$ and outputs the length of the shortest path
+from $u$ to $v$ which takes {\em exactly} $k$ steps.  The path is
+allowed to visit vertices multiple times (for example, the path
+$1\rightarrow 3\rightarrow 2\rightarrow 3\rightarrow 7$ is a valid
+path from $1$ to $7$ of length $4$, even though it visits vertex $3$
+twice).  What is the running time of your algorithm?  You do not have
+to write the code for it.
+
+\paragraph{Example solution:}
+For a vertex $w$ and integer $t$, let $f(w,t)$ be the length of the
+shortest path from $u$ to $w$ taking exactly $t$ steps. Then we have
+the following.
+$$
+f(w, t) = \begin{cases} 0, \ &
+  \mathrm{if}\ w=u\ \mathrm{and}\ t=0
+\\ \infty, \ & \mathrm{if}\ w\neq u\ \mathrm{and}\ t=0
+\\ \min_{z: (z,w)\ \mathrm{is\ an\ edge}} \ell(z,w) + f(z,t-1), \ &
+\mathrm{otherwise}
+\end{cases} ,
+$$
+
+where $\ell(z,w)$ is the length of the edge $(z,w)$.  In other words,
+the shortest way to get to $w$ in $t$ steps goes to some other vertex
+$z$ in $t-1$ steps then takes the edge from $z$ to $w$, so we try all
+possibilities for $z$.  This can be implemented using recursion and
+memoization, and we will want to calculate $f(v, k)$.  When
+calculating $f(w,t)$ for different values of $w,t$ along the way,
+there are at most $n$ values for $w$ and $k+1$ vales for $t$.  Also,
+if $m$ is the number of edges in the graph, when you consider all
+possible vertices in the place of $w$, all loops combined loop over
+all edges once, for a total of $m$.  So the runtime is
+$\Theta((n+m)k)$.  A solution which said running time $O(n^2k)$ would
+get almost all the points (there are $n$ possibilities for $w$ and
+$k+1$ for $t$, and the loop that takes the min of all possibilities is
+at most $n$ steps).
+
+\paragraph{Question 8:}
+In class I described Karatsuba's algorithm for multiplying two
+$n$-digit numbers, which recursively multiplied three pairs of
+$n/2$-digit
+numbers then combined the results in $O(n)$ time to get an overall
+running time of $\Theta(n^{\log_2 3})$.
+
+Suppose that there existed an algorithm for multiplying two $n$-digit
+numbers which recursively multiplied {\em two} pairs of $n/2$-digit
+numbers
+then combined the results in $O(n)$ time. What would the running time
+then be?
+
+\paragraph{Example solution:}
+If $T(n)$ is the running time for multiplying two $n$-digit numbers,
+then we would have $T(n) = 2T(n/2) + O(n)$.  This is exactly the
+recurrence for \texttt{mergeSort}, so overall we would have a running
+time of $O(n\log_2 n)$.  One can also draw the recursion tree and see
+that there are $\log_2 n$ levels, each of which has total work $n$
+(level $k$ will have $2^k$ nodes, each doing work $O(n/2^k)$).
+
+\end{document}

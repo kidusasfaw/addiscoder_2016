@@ -1,0 +1,79 @@
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    25
+  output: |
+    25
+  is_secret: false
+  
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    1
+  output: |
+    1
+  is_secret: false
+  
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    15
+  output: |
+    10 5
+  is_secret: false
+  
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    3
+  output: |
+    1 1 1
+  is_secret: false
+    
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    32
+  output: |
+    25 5 1 1
+  is_secret: false
+  
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    17
+  output: |
+    10 5 1 1
+  is_secret: true
+  
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    200
+  output: |
+    25 25 25 25 25 25 25 25
+  is_secret: true  
+
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    74
+  output: |
+    25 25 10 10 1 1 1 1
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    99
+  output: |
+    25 25 25 10 10 1 1 1 1
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 1000
+  input: |
+    41
+  output: |
+    25 10 5 1
+  is_secret: true    

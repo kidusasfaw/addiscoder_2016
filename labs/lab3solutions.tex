@@ -1,0 +1,258 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+\usepackage[usenames]{color}
+\newcommand{\ans}[1]{\textcolor{red}{#1}}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Sports Academy \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{2016}{Lab 3 Solutions}
+
+\paragraph{Exercise 1:}
+Consider the {\em Trionacci} sequence defined as follows.
+$$
+T_i = \begin{cases} 1 \ &
+  \mathrm{if}\ i=0\ \mathrm{or}\ i = 1 \ \mathrm{or}\ i=2
+\\ T_{i-1} + T_{i-2} + T_{i-3} \
+&\mathrm{otherwise} \end{cases}
+$$
+
+Implement a function \texttt{trionacci}(n) which returns the $n$th
+Trionacci number.
+
+\paragraph{Example solution:}
+\begin{verbatim}
+def trionacci(n):
+    if n<3:
+        return 1
+    else:
+        return trionacci(n-1) + trionacci(n-2) + trionacci(n-3)
+\end{verbatim}
+
+\paragraph{Exercise 2:}
+The {\em factorial} of $n$ is $n! = 1\cdot 2 \cdot \ldots \cdot n$ (we
+define $0! = 1$).
+Implement \texttt{factorial}(n) in two ways: one using a
+\texttt{while} loop, and the other using recursion.
+
+\paragraph{Example solution:}
+\begin{verbatim}
+# using a while loop
+def factorial(n):
+    ans = 1
+    x = 1
+    while x <= n:
+        ans *= x
+        x += 1
+    return ans
+\end{verbatim}
+
+\begin{verbatim}
+# using recursion
+def factorial(n):
+    if n==0:
+        return 1
+    else:
+        return n*factorial(n-1)
+\end{verbatim}
+
+\paragraph{Exercise 3:}
+Last lab we had the following exercise:
+
+\medskip
+
+An integer is said to be a {\em palindrome} if its digits are the same
+forward and backwards (not including leading zeroes). For example,
+12321 is a palindrome, as is 5.  1231 on the other hand is not a
+palindrome, and neither is 50 (remember we are not including leading
+zeroes).
+Write a function \texttt{isPalindrome}(n) which returns
+\texttt{True} if n is a palindrome and \texttt{False} otherwise.
+
+\medskip
+
+In today's lab, implement \texttt{isPalindrome} using recursion.
+Specifically, check if the first and last characters are equal, and
+recurse on the middle substring if required.
+
+\paragraph{Example solution:}
+\begin{verbatim}
+def isPalindrome(s):
+    if len(s) < 2:
+        return True
+    return s[0]==s[len(s)-1] and isPalindrome(s[1:len(s)-1])
+\end{verbatim}
+
+\paragraph{Exercise 4:}
+Define a function \texttt{flooredSquareRoot}(n)
+which takes a positive \texttt{int} or \texttt{long} n and computes
+its square root, rounded down to the nearest integer.  Python has a
+buit-in \texttt{sqrt} function which could be helpful here, but don't
+use it.
+
+Do two implementations.  In the first, use a while loop starting from
+$0$ and going upward.  Call that function
+\texttt{slowFlooredSquareRoot}(n). Next, implement
+\texttt{flooredSquareRoot}(n) using binary search.  Experiment by
+evaluating these functions on various inputs.  Try n being a billion
+--- notice a difference in the time it takes to compute the answer?
+
+\paragraph{Example solution:}
+\begin{verbatim}
+def slowFlooredSquareRoot(n):
+    x = 0
+    while x*x <= n:
+        x += 1
+    return x-1
+\end{verbatim}
+
+\begin{verbatim}
+# we assume the floored square root is in the interval [a,b]
+def flooredSquareRootHelper(a, b, n):
+    mid = (a+b+1)/2
+    if a==b:
+        return a
+    elif mid*mid == n:
+        return mid
+    elif mid*mid < n:
+        return flooredSquareRootHelper(mid, b, n)
+    else:
+        return flooredSquareRootHelper(a, mid-1, n)
+
+def flooredSquareRoot(n):
+    return flooredSquareRootHelper(0, n, n)
+\end{verbatim}
+
+\paragraph{Exercise 5:}
+Implement a function \texttt{calcNthSmallest}(n, intervals) which
+takes as
+input a nonnegative \texttt{int} n, and a list of intervals
+$[[a_1,b_1],\ldots,[a_m,b_m]]$ and
+calculates the $n$th smallest number (0-indexed) when taking the union
+of all the intervals with repetition.  For example, if the intervals
+were $[1,5],[2,4],[7,9]$, their union with repetition would be
+$\{1,2,2,3,3,4,4,5,7,8,9\}$ (note $2,3,4$ each appear twice since
+they're in both the intervals $[1,5]$ and $[2,4]$).  For this list of
+intervals, the $0$th smallest number would be $1$, and the $3$rd and
+$4$th smallest would both be $3$.
+
+Your implementation should run quickly even when the $a_i,b_i$ can be
+very large (like, one trillion), and there are several
+intervals. 
+
+\paragraph{Example solution:}
+First, here are some helper functions which will be useful.
+\begin{verbatim}
+# compute the index of the first time x appears in the union of intervals
+def firstTime(x, intervals):
+    answer = 0
+    for L in intervals:
+        if x > L[1]:
+            answer += L[1] - L[0] + 1
+        elif x > L[0]:
+            answer += x - L[0]
+    return answer
+
+# compute the index of the last time x appears in the union of intervals
+def lastTime(x, intervals):
+    answer = 0
+    for L in intervals:
+        if x >= L[1]:
+            answer += L[1] - L[0] + 1
+        elif x >= L[0]:
+            answer += x - L[0] + 1
+    return answer-1
+\end{verbatim}
+
+Now, here is a slow implementation of \texttt{calcNthSmallest}(n,
+intervals) (at least, it is slow when the intervals can be very long).
+
+\begin{verbatim}
+def calcNthSmallest(n, intervals):
+    for L in intervals:
+        for x in xrange(L[0], L[1]+1):
+            first = firstTime(x, intervals)
+            last = lastTime(x, intervals)
+            if first<=n and n<=last:
+                return x
+\end{verbatim}
+
+The reason it is slow for long intervals is that we loop over the
+entire range
+from L[0] to L[1]+1.  To make this faster, we can use a binary
+search over the interval [L[0], L[1]].
+
+\begin{verbatim}
+# Binary searches for the nth smallest number being in the interval
+# [a,b]. If no such number in [a,b] is found, [False, `'] is returned.
+# Otherwise, [True, x] is returned, where x is the nth smallest
+# number. 
+def binarySearch(a, b, n, intervals):
+    if a>b:
+        return [False, `']
+    mid = (a+b)/2
+    first = firstTime(mid, intervals)
+    last = lastTime(mid, intervals)
+    if first<=n and n<=last:
+        return [True, mid]
+    elif first>n:
+        return binarySearch(a, mid-1, n, intervals)
+    else:
+        return binarySearch(mid+1, b, n, intervals)
+
+def calcNthSmallest(n, intervals):
+    # The answer has to be in one of the intervals, so try them all in
+      a for loop.
+    for L in intervals:
+        answer = binarySearch(L[0], L[1], n, intervals)
+        if answer[0]:
+            return answer[1]
+\end{verbatim}
+
+\end{document}

@@ -1,0 +1,54 @@
+- point_value: 20
+  timeout_milliseconds: 1000
+  input: |
+    2
+    0 0
+    0 0        
+  output: |
+    [[],[]]
+  is_secret: false
+
+- point_value: 20
+  timeout_milliseconds: 1000
+  input: |
+    2
+    0 1
+    0 0
+  output: |
+    [[1],[]]
+  is_secret: false
+
+- point_value: 20
+  timeout_milliseconds: 2000
+  input: |
+    2
+    0 1
+    1 0
+  output: |
+    [[1],[0]]
+  is_secret: true
+
+- point_value: 20
+  timeout_milliseconds: 2000
+  input: |
+    4
+    0 1 0 0
+    0 0 1 0
+    0 0 0 1
+    0 0 0 0
+  output: |
+    [[1],[2],[3],[]]
+  is_secret: true
+
+- point_value: 20
+  timeout_milliseconds: 2000
+  input: |
+    4
+    0 0 1 0
+    0 0 0 1
+    1 0 0 0
+    0 1 0 0
+  output: |
+    [[2],[3],[0],[1]]
+  is_secret: true
+  

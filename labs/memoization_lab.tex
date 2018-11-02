@@ -1,0 +1,80 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+\usepackage{pgf}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Addis Ababa University, Amist Kilo \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{July 20, 2011}{Lab 12}
+
+\paragraph{Exercise 1:}
+Modify the code for the Bellman-Ford single-source shortest path
+algorithm so that it takes as input the origin $x$ and destination $y$
+and returns the actual shortest {\em path} from $x$ to $y$ and not
+just the length of the shortest path.  You can assume that $y$ is
+reachable from $x$ and that there are no negative weight cycles.
+
+\paragraph{Exercise 2:}
+Modify the code for Floyd-Warshall (either the recursive or iterative
+approach) to keep track of a matrix \texttt{next}[][] so that
+\texttt{next}[u][v] is some intermediate vertex on the shortest path
+from u to v (or the Python value \texttt{None} if there is no
+intermediate vertex).  Now write a recursive procedure
+\texttt{findPath} which
+takes $u$, $v$, and the \texttt{dist} and \texttt{next} matrices, and
+returns the shortest path from $u$ to $v$ as a list.  For example, if
+the shortest path from $0$ to $3$ is $0\rightarrow 1\rightarrow 3$,
+then \texttt{findPath} should return [0,1,3].
+
+\paragraph{Exercise 3:}
+Modify the code for Floyd-Warshall to return -1 if there exists a
+negative weight cycle somewhere in the graph.  Otherwise, it should
+return a matrix of distances as before.
+
+\end{document}

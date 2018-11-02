@@ -1,0 +1,142 @@
+- point_value: 0
+  timeout_milliseconds: 120
+  input: |
+    L
+    3
+    42
+    2
+    a
+  output: |
+    42
+    2
+    a
+    42
+    2
+    a
+  is_secret: false
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    S
+    hello
+  output: |
+    hellohello
+  is_secret: false
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    L
+    0
+  output: |
+    
+  is_secret: false
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    S
+     
+  output: |
+    
+  is_secret: false
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    S
+    kiitos! 
+  output: |
+    kiitos! kiitos! 
+  is_secret: false
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    L
+    1
+    1
+  output: |
+    1
+    1
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    L
+    10
+    a
+    b
+    c
+    d
+    e
+    f
+    g
+    h
+    i
+    j
+  output: |
+    a
+    b
+    c
+    d
+    e
+    f
+    g
+    h
+    i
+    j
+    a
+    b
+    c
+    d
+    e
+    f
+    g
+    h
+    i
+    j
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    S
+    Hello, world!
+  output: |
+    Hello, world!Hello, world!
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    S
+    Given a list or string x, output x concatenated with itself.
+  output: |
+    Given a list or string x, output x concatenated with itself.Given a list or string x, output x concatenated with itself.
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    L
+    2
+    a
+    hello world
+  output: |
+    a
+    hello world
+    a
+    hello world
+  is_secret: true
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    S
+    a
+  output: |
+    aa
+  is_secret: true

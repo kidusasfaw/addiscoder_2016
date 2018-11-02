@@ -1,0 +1,293 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+\usepackage{pgf}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Addis Ababa University, Amist Kilo \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{August 8, 2016}{Lecture 16}
+
+\paragraph{\Large Numerical algorithms:}
+Today we'll cover algorithms for various numerical problems: 
+integer multiplication, powering, and solving linear systems of
+equations.
+
+\paragraph{\Large Integer Multiplication:}
+We all learned how to multiply numbers with lots of digits when we
+were kids:
+
+\begin{center}
+{\Large
+\begin{tabular}{r}
+435\\
+213\\
+\hline
+1305\\
+435\hspace*{.2cm}\\
+870\hspace*{.4cm}\\
+\hline
+92655
+\end{tabular}
+}
+\end{center}
+
+Suppose the integers were given in input as lists of their digits,
+from left to right.  Then the above method corresponds to the
+following code.
+
+\begin{verbatim}
+# takes two lists of digits representing integers a,b and outputs a
+# list of digits corresponding to their product
+def integerMultiply(a, b):
+    # we will put the result in c
+    c = [0]*(len(a) + len(b))
+    for i in xrange(len(b)):
+        atB = len(b) - i - 1
+        # multiply b[atB] by a and put it in t
+        t = [0]*(len(a) + 1)
+        # keep track of the carry digit
+        carry = 0
+        for j in xrange(len(a)):
+            atA = len(a) - j - 1
+            product = b[atB]*a[atA] + carry
+            t[len(t) - 1 - j] = product % 10
+            carry = product / 10
+        t[0] = carry
+        # now add t, shifted over by i to the left, to c
+        carry = 0
+        for j in xrange(len(t)):
+            sum = c[len(c) - 1 - j - i] + t[len(t) - 1 - j] + carry
+            c[len(c) - 1 - j - i] = sum % 10
+            carry = sum / 10
+    # strip away the leading zeroes from c before returning it
+    at = 0
+    while at<len(c) and c[at]==0:
+        at += 1
+    if at == len(c):
+        return [0]
+    else:
+        return c[at:]    
+\end{verbatim}
+
+In fact, the above code is more memory-efficient than the
+grade school way of multiplying we learned, since it adds to the
+result after processing every digit in $b$ rather than waiting to
+process all digits then add up everything at the end.
+If both numbers have $n$ digits, the running time of the above
+implementation is $\Theta(n^2)$ (two nested \texttt{for} loops each
+taking $n$ steps), and the memory usage is $\Theta(n)$.
+
+How can we speed this up?  Let's try the {\em divide and conquer}
+method.  Divide and conquer is a strategy based on dividing up the
+input into smaller pieces, solving the problem on the smaller pieces,
+then combining the result to get the answer for the full input.  We
+did this for example with \texttt{mergeSort}: to sort a list we
+divided it into two smaller pieces, recursively solved (i.e.\ sorted)
+the smaller pieces, then merged to get the result for the overall
+input.
+
+So, let's say we're trying to multiply a \texttt{list} of digits $a$
+by another \texttt{list} of digits $b$, each of length $n$.  
+For the sake of simplifying all future discussion, let's assume $n$ is
+a perfect power of $2$ (if not, we can pad both $a$ and $b$ by $0$s
+at their beginnings until their lengths {\em are} powers of $2$, and
+doing this at most doubles $n$).
+Let $a_{\mathrm{high}}$ represent the first half of the digits of $a$,
+i.e.\ $a[:n/2]$, and let $a_{\mathrm{low}}$ represent $a[n/2:]$.
+Then, treating $a$ as an integer, $a = a_{\mathrm{high}}\cdot 10^{n/2}
++ a_{\mathrm{low}}$.  Doing similarly for $b$, this means that
+\begin{align*}
+a\times b &= (a_{\mathrm{high}}\cdot 10^{n/2}
++ a_{\mathrm{low}}) \times (b_{\mathrm{high}}\cdot 10^{n/2}
++ b_{\mathrm{low}}) \\
+&{}= a_{\mathrm{high}}\cdot b_{\mathrm{high}}\cdot 10^n +
+(a_{\mathrm{high}}\cdot b_{\mathrm{low}} +
+a_{\mathrm{low}}\cdot b_{\mathrm{high}})\cdot 10^{n/2} +
+a_{\mathrm{low}}\cdot b_{\mathrm{low}}
+\end{align*}
+
+In other words, to multiply two $n$-digit numbers, we just need to
+multiply four pairs of $n/2$-digit numbers, shift some results over by
+either $n/2$ or $n$ (this is what multiplying by a power of $10$
+does), then add up the results.  Shifting $n$-digit numbers over and
+adding them takes $\Theta(n)$ time.  
+When $n = 1$, we can just do the multiplication in constant time.
+Thus, if $T(n)$ is the running
+time to multiply two $n$-digit numbers, we have the recurrence
+
+$$
+T(n) = \begin{cases} \Theta(1) \ &
+  \mathrm{if}\ n=1
+\\ 4\cdot T(n/2) + \Theta(n) \
+&\mathrm{otherwise} \end{cases}
+$$
+
+If we draw out the recursion tree for $T$, labeling each node with how
+much work needs to be done there, the root does at most $Cn$ work for
+some constant $C$.  It then has $4$ children, each doing $Cn/2$ work.
+Each of those children then again has $4$ children, each doing $Cn/4$
+work.  This goes on for $\log_2 n$ levels of the tree, at which point
+$n$ is finally $1$.  Thus the total work is $\sum_{i=0}^{\log_2 n} 4^i
+\cdot (Cn/2^i) = Cn \cdot \sum_{i=0}^{\log_2 n} 2^i$.  Recalling that
+$\sum_{i=0}^t x^i = (x^{t+1} - 1)/(x - 1)$ for $x\neq 1$, this means
+that the total work is $Cn \cdot (2^{1 + \log_2 n} - 1) = 2Cn^2 - Cn =
+\Theta(n^2)$.  In other words, the obvious recursive
+divide-and-conquer approach for this problem has no benefit over the
+way we learned to solve the problem in grade school.
+
+\paragraph{Karatsuba's algorithm}
+
+Anatolii Alexeevitch Karatsuba in 1960 found a way to make the
+divide-and-conquer approach work for speeding up integer
+multiplication.  The story goes that Andrey Kolmogorov, a giant of
+probability theory and other areas of mathematics, had a conjecture from
+1956 stating that it is impossible to
+multiply two $n$-digit numbers in faster than $\Omega(n^2)$ time.  In
+1960 Kolmogorov told many scientists his conjecture at a seminar at
+Moscow State University,
+and Karatsuba, then in the audience, went home and disproved
+Kolmogorov's conjecture in exactly one week\footnote{See
+  A. A. Karatsuba. The complexity of computations. Proceedings of the
+  Steklov Institute of Mathematics, Vol. 211, pp. 169--183,
+  1995.}. Let's now cover the method he came up with.
+
+Let $X = a_{\mathrm{high}}\cdot b_{\mathrm{high}}$, $Y =
+a_{\mathrm{low}}\cdot b_{\mathrm{low}}$, and $Z = (a_{\mathrm{high}} +
+a_{\mathrm{low}})\cdot (b_{\mathrm{high}} + b_{\mathrm{low}})$.
+Then
+$$ a\times b = X\cdot 10^n + (Z - X - Y)\cdot 10^{n/2} + Y .$$
+Thus, now, to multiply two $n$-digit numbers we only need to multiply
+{\em three} pairs of $n/2$-digit numbers.  This gives the recurrence
+$$
+T(n) = \begin{cases} \Theta(1) \ &
+  \mathrm{if}\ n=1
+\\ 3\cdot T(n/2) + \Theta(n) \
+&\mathrm{otherwise} \end{cases} .
+$$
+
+Now if we draw out the recursion tree for $T$, labeling each node with
+how
+much work needs to be done there, the root does at most $Cn$ work for
+some constant $C$.  It then has $3$ children, each doing $Cn/2$ work.
+Each of those children then again has $3$ children, each doing $Cn/4$
+work.  This goes on for $\log_2 n$ levels of the tree, at which point
+$n$ is finally $1$.  Thus the total work is $\sum_{i=0}^{\log_2 n} 3^i
+\cdot (Cn/2^i) = Cn \cdot \sum_{i=0}^{\log_2 n} (3/2)^i$.  Recalling that
+$\sum_{i=0}^t x^i = (x^{t+1} - 1)/(x - 1)$ for $x\neq 1$, this means
+that the total work is $Cn \cdot ((3/2)^{1 + \log_2 n} - 1) =
+1.5Cn^{\log_2 3} - Cn =
+\Theta(n^{\log_2 3}) \approx \Theta(n^{1.585})$.
+
+In fact it is possible to get integer multiplication algorithms with
+running times just a bit larger than $n \log n$ using what's known as
+the {\em Fast Fourier Transform}, but we will not cover these methods
+in this course.
+
+\paragraph{\Large Powering:}
+Another important numerical algorithm is that for {\em powering}.
+Suppose we have two integers $a,n$ and would like to compute $a^n$.
+The obvious way would be something like the following:
+
+\begin{verbatim}
+def power(a, n):
+    ans = 1
+    while n > 0:
+        ans *= a
+        n -= 1
+    return ans
+\end{verbatim}
+
+The above method does $n$ integer multiplications in order to compute
+$a^n$.  A faster method is given below, which is known as the method
+of {\em repeated squaring}.
+
+\begin{verbatim}
+def power(a, n):
+    if n == 0:
+        return 1
+    b = power(a, n/2)
+    b *= b
+    if n % 2 == 1:
+        b *= a
+    return b
+\end{verbatim}
+
+That is, to raise $a$ to the $n$th power, we just need to raise it to
+the $\floor{n/2}$th power then square the result (and multiply in an extra
+factor of $a$ if $n$ was odd).  The repeated squaring method performs
+at
+most $2\log_2 n = O(\log_2 n)$ integer multiplications to compute
+$a^n$.
+
+The method of course does not only work for raising integers to
+integer powers.  We could also use it, for example, to raise matrices
+to integer powers.  Recall that an $n\times m$ matrix is a 2D-grid of
+numbers, with $n$ rows and $m$ columns.  The definition of
+multiplication of matrices is that if $A$ is $n\times m$ and $B$ is
+$m\times p$, then $AB$ is $n\times p$ where the $(i,j)$th entry of
+$AB$ is equal to $\sum_{k=1}^m A_{i,k}\cdot B_{k,j}$.  
+Let $F_i$ be the $i$th Fibonacci number.
+Consider the following matrix product:
+$$ \left[
+\begin{array}{cc}
+1 & 1 \\
+1 & 0 
+\end{array}\right ] \left[\begin{array}{c} F_i\\F_{i-1}\end{array}\right] =
+\left[\begin{array}{c} F_i+F_{i-1}\\F_i\end{array}\right] .$$
+
+If we let $A$ be the matrix on the lefthand side above, then
+$$ A^n \cdot \left[\begin{array}{c} F_1\\F_{0}\end{array}\right] =
+\left[\begin{array}{c} F_{n+1}\\F_n\end{array}\right]$$
+
+Thus we can compute the $n$th Fibonacci number in just $O(\log_2 n)$
+integer multiplications by doing repeated squaring to calculate
+$A^{n-1}$ then multiplying the result by a $2\times 1$ matrix then
+reading off the result.
+
+\end{document}

@@ -1,0 +1,55 @@
+<b>Problem evaluate</b>
+
+<pre class="problemtext">
+
+An expression is defined recursively as follows. An integer is an expression,
+which evaluates to the integer itself. If EXPR is an expression, then so is
+(EXPR), and it evaluates to whatever EXPR evaluated to. Finally, if EXPR1 and
+EXPR2 are expressions, then (OP EXPR1 EXPR2) is an expression, where OP can
+be any one of +, -, *, and it evaluates to evaluate(EXPR1) OP evaluate(EXPR2).
+You should write a function evaluate which takes a str and evaluates the
+expression it is a valid expression, and outputs "INVALID" if it is not a
+valid expression.
+
+
+INPUT FORMAT
+A string consisting of +, -, *, (, ), space, and digits.
+
+
+OUTPUT FORMAT
+A single integer representing the evaluated expression, or the string
+"INVALID".
+
+
+SAMPLE INPUT
+(+ 1 5)
+
+
+SAMPLE OUTPUT
+6
+
+
+SAMPLE INPUT
+(* 3 (- 5 2))
+
+
+SAMPLE OUTPUT
+9
+
+
+SAMPLE INPUT
+(+ 1 (+ 5))
+
+
+SAMPLE OUTPUT
+INVALID
+
+
+SAMPLE INPUT
+()
+
+
+SAMPLE OUTPUT
+INVALID
+
+</pre>

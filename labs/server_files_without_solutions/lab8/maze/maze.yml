@@ -1,0 +1,67 @@
+- point_value: 0
+  timeout_milliseconds: 1000
+  input: |
+    2 4
+    S...
+    ###E
+  output: |
+    4
+  is_secret: false
+
+- point_value: 0
+  timeout_milliseconds: 1000
+  input: |
+    4 4
+    .##.
+    #S..
+    ###.
+    E...
+  output: |
+    7
+  is_secret: false
+
+- point_value: 0
+  timeout_milliseconds: 2000
+  input: |
+    3 4
+    E#..
+    #S..
+    ....
+  output: |
+    -1
+  is_secret: false
+
+- point_value: 20
+  timeout_milliseconds: 2000
+  input: |
+    3 4
+    S..E
+    .##.
+    ....
+  output: |
+    3
+  is_secret: true
+
+- point_value: 30
+  timeout_milliseconds: 2000
+  input: |
+    4 4
+    ..E#
+    ###.
+    .#..
+    .S..
+  output: |
+    -1
+  is_secret: true
+
+- point_value: 50
+  timeout_milliseconds: 2000
+  input: |
+    4 4
+    ..E#
+    ..#.
+    .#S.
+    ....
+  output: |
+    8
+  is_secret: true

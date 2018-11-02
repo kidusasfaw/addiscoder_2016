@@ -1,0 +1,228 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Sports Academy \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{July 19, 2016}{Lecture 2}
+
+\paragraph{\Large if Statements:}
+
+The \texttt{if} statement allows you to only conditionally execute
+some code block, conditioned on some expression evaluating to
+\texttt{True}.
+
+\begin{verbatim}
+if BOOL_EXPR:
+    CODE_BLOCK
+elif BOOL_EXPR:
+    CODE_BLOCK
+...
+elif BOOL_EXPR:
+    CODE_BLOCK
+else:
+    CODE_BLOCK
+\end{verbatim}
+
+
+In the above code, exactly one of the code blocks is executed,
+corresponding to the first \texttt{BOOL\_EXPR} which evaluates to
+\texttt{True} (or the final code block corresponding to the
+\texttt{else} in the case that none of the \texttt{BOOL\_EXPR}
+evaluates to \texttt{True}).
+The \texttt{elif} and \texttt{else} statements are optional.
+
+\paragraph{Example:}
+\begin{verbatim}
+def printSign(n):
+    if n < 0:
+        print `Negative'
+    elif n > 0:
+        print `Positive'
+\end{verbatim}
+
+Now, if we were to execute \texttt{printSign}(-1), `Negative' would
+be printed, and similarly \texttt{printSign}(1) would print
+`Positive'.  Calling \texttt{printSign}(0) would result in nothing
+being printed.
+
+\paragraph{\Large for Statements:}
+The \texttt{for} statement allows you to iterate over data in Python
+(for example, iterating over items in a \texttt{list}, or characters
+in \texttt{str}).
+
+\begin{verbatim}
+for var in v:
+   CODE_BLOCK
+\end{verbatim}
+
+The expression \texttt{v} above should evaluate to something
+iterable.
+
+\paragraph{Example:}
+\begin{verbatim}
+fruits = [`orange', `pineapple', `banana', `mango']
+pluralFruits = []
+for x in fruits:
+    plural = x + `s'
+    pluralFruits += [plural]
+\end{verbatim}
+
+\noindent The above code segment would cause \texttt{favoriteFruits}
+to equal [`oranges', `pineapples', `bananas', `mangos'].
+
+\paragraph{\Large while Statements:}
+The \texttt{while} statement allows you to repeatedly execute a code
+block as long as some \texttt{bool} expression evaluates to
+\texttt{True}.
+
+\begin{verbatim}
+while BOOL_EXPR:
+   CODE_BLOCK
+\end{verbatim}
+
+\paragraph{Example:}
+\begin{verbatim}
+x = []
+y = 0
+while y < 10:
+    x += [y]
+    y += 1
+\end{verbatim}
+
+\noindent The above code segment would cause \texttt{x} to equal
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].
+
+\paragraph{\Large break and continue:}
+
+Sometimes you might want to stop iterating in a \texttt{for} or
+\texttt{while} early, or just skip some particular iteration.  The
+\texttt{break} and \texttt{continue} statements are useful for this.
+\texttt{break} exits the loop early, and \texttt{continue} moves back
+to the beginning of the loop.
+
+\paragraph{Example:}
+
+Both of these code examples print only the odd numbers between 0 and
+5.
+
+\begin{verbatim}
+# Example with for loop
+myList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+for x in myList:
+    if x > 5:
+        break
+    elif x%2 == 0:
+        continue
+    else:
+        print x
+\end{verbatim}
+
+\begin{verbatim}
+# Example with while loop
+x = 0
+while True:
+    if x > 5:
+        break
+    elif x%2 == 0:
+        x += 1
+        continue
+    else:
+        print x
+    x += 1
+\end{verbatim}
+
+\paragraph{\Large Other useful functions:}
+It will be helpful for today's lab to know the following functions.
+
+\begin{itemize}
+\item \texttt{len}(x) returns the length of an iterable data type
+  (such as a \texttt{str} or \texttt{list}) as an \texttt{int}.  For
+  example, \texttt{len}(`abc') and \texttt{len}([`a', `b', `c']) 
+  both evaluate to 3.  \texttt{len}([`a', [`b', `c', `d']]) 
+  evaluates to 2.
+\item \texttt{range}(x) returns a list of \texttt{int}s from $0$ to
+  $x-1$.  For example, \texttt{range}(5) returns [0, 1, 2, 3, 4].  You
+  can also give \texttt{range} a starting value (\texttt{range}(2, 5)
+  returns [2, 3, 4]) and a ``skip-by'' value (\texttt{range}(0, 10, 2)
+  returns [0, 2, 4, 6, 8]).
+\item \texttt{xrange}(x) is similar to \texttt{range}(x), except that
+  it does not actually return a list, but rather returns an object
+  which can be iterated over and has the same values as if
+  \texttt{range} had been called.  We have not spoken about objects
+  yet, so do not worry too much about what that means, but the main
+  point is that \texttt{xrange} only generates the next value as you
+  need it without ever explicitly storing the entire \texttt{list} in
+  memory, whereas \texttt{range} would explicitly store the list.
+  Thus, \texttt{xrange} can be helpful if you know your code will
+  \texttt{break} early in a long sequence.  Consider the following
+  examples:
+
+\begin{verbatim}
+# Example 1
+for x in range(1000000000):
+    if x == 6:
+        break
+    print x
+
+# Example 2
+for x in xrange(1000000000):
+    if x == 6:
+        break
+    print x
+\end{verbatim}
+
+In both cases the numbers $0,1,2,3,4,5$ are printed, but the first
+code example is almost a billion times slower because \texttt{range}
+will actually generate a list of size one billion at the beginning of
+the loop, whereas \texttt{xrange} just generates the next number as
+it is needed.
+\end{itemize}
+
+\end{document}

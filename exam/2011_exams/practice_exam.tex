@@ -1,0 +1,191 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb,color}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newcommand{\ans}[1]{\textcolor{red}{#1}}
+
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\title{Practice Exam\\Algorithms and Programming for High Schoolers
+  (AddisCoder)}
+\date{}
+
+\maketitle
+
+\paragraph{Question 1:}
+Imagine evaluating the following expressions in order in the Python
+interpeter.  For each expression written in red, write down what the
+expression would evaluate to in the space below.  If the expression
+would cause an error in Python, then write Error.
+
+\begin{itemize}
+\item[$>>>$]\texttt{x = 5}
+\item[$>>>$]\texttt{y = 7}
+\item[$>>>$]\texttt{z = 2}
+\item[$>>>$]\ans{\texttt{x * y + z}}
+\item[]
+\item[$>>>$]\ans{\texttt{(x * y) + z}}
+\item[]
+\item[$>>>$]\ans{\texttt{x * (y + z)}}
+\item[]
+\item[$>>>$]\ans{\texttt{x \% y}}
+\item[]
+\item[$>>>$]\ans{\texttt{y \% x}}
+\item[]
+\item[$>>>$]\ans{\texttt{[] * z}}
+\item[]
+\item[$>>>$]\ans{\texttt{[] * `2'}}
+\item[]
+\item[$>>>$]\ans{\texttt{[1] * z + x}}
+\item[]
+\item[$>>>$]\ans{\texttt{str(2)}}
+\item[]
+\item[$>>>$]\ans{\texttt{[[]][0]}}
+\item[]
+\item[$>>>$]\ans{\texttt{[[]][1]}}
+\item[]
+\item[$>>>$]\ans{\texttt{len([[[]]])}}
+\item[]
+\item[$>>>$]\ans{\texttt{[[]][]}}
+\item[]
+\item[$>>>$] \texttt{x = [2, 3]}
+\item[$>>>$] \texttt{y = []}
+\item[$>>>$] \texttt{for i in xrange(x[0]**x[1]):}
+\item[$>>>$] \ \ \ \ \texttt{y += [i*2]}
+\item[$>>>$] \ans{\texttt{y}}
+\item[]
+\item[$>>>$] \texttt{def isPrime(x):}
+\item[$>>>$] \ \ \ \ \texttt{if x < 2: return False}
+\item[$>>>$] \ \ \ \ \texttt{for i in xrange(2, x):}
+\item[$>>>$] \ \ \ \ \ \ \ \ \texttt{if i*i >= x: break}
+\item[$>>>$] \ \ \ \ \ \ \ \ \texttt{if x \% i == 0: return False}
+\item[$>>>$] \ \ \ \ \texttt{return True}
+\item[$>>>$]\ans{isPrime(1)}
+\item[]
+\item[$>>>$]\ans{isPrime(2)}
+\item[]
+\item[$>>>$]\ans{isPrime(9)}
+\item[]
+\item[$>>>$]\ans{isPrime(12)}
+\item[]
+\end{itemize}
+
+\paragraph{Question 2:}
+Consider the \texttt{list}s \texttt{[]}, \texttt{[[]]},
+\texttt{[[[]]]}, $\ldots$  The {\em depth} of such a \texttt{list} is
+the
+number of nested layers of brackets.  So, \texttt{depth([])} is $0$,
+\texttt{depth([[]])} is $1$, \texttt{depth([[[]]])} is $2$, etc.
+Write a function \texttt{depth}(L) which takes such a \texttt{list}
+and computes its depth.  What's the running time of your function in
+terms of $n$, the number of brackets in the list?
+
+\paragraph{Question 3:}
+Consider the following code for testing whether a number is prime or
+not.
+
+\begin{verbatim}
+def isPrime(n):
+    if n < 2: return False
+    for i in xrange(2, n):
+        if n % i == 0: return False
+        return True
+\end{verbatim}
+
+What is the running time of this code as written?  Is it correct?  If
+it's not correct, suggest a minor change to the code which would make
+it correct.
+
+\paragraph{Question 4:}
+Write a function \texttt{cubeRoot}(n) which takes a positive integer n
+and outputs the largest integer x such that $x^3 \le n$.
+
+\begin{itemize}
+\item[(a)] Give a solution with running time $O(n^{1/3})$.
+\item[(b)] Give a solution with running time $O(\log_2 n)$.
+\end{itemize}
+
+The running times above are assuming you can do arithmetic on integers
+up to $n$ in $O(1)$ time.
+
+\paragraph{Question 5:}
+Suppose we have a list of numbers L[0],L[1],$\ldots$,L[n-1].  An
+{\em inversion} in the list is a pair $i,j$ such that $i<j$ but
+$\mathrm{L[i]}> \mathrm{L[j]}$.  In other words, an inversion is a
+pair of indices where the larger number comes before the smaller
+number.
+
+Describe an algorithm for counting the number of inversions in a list,
+then implement your algorithm in Python as
+\texttt{countInversions}(L).  Faster running times get more points.
+Hint: The problem is solvable in $\Theta(n\log_2 n)$ time, though an
+easier solution takes $\Theta(n^2)$ time.  You get more points for
+giving a slow, correct solution than a fast, incorrect solution.
+
+\paragraph{Question 6:}
+We've discussed making change using the least number of coins
+possible.  What if we want to count how many different ways there are
+of making change?  For example, if the coins we have available are
+[1,5,10,25] cents and we want to make change for 12 cents, there are 4
+ways: (1) give all 1-cent pieces, (2) give a 10-cent piece and two
+1-cent pieces, (3) give two 5-cent pieces and two 1-cent pieces, and
+(4) give one 5-cent piece and seven 1-cent pieces.  So, the answer in
+this case is $4$.
+
+Write a function \texttt{change}(L, n) which outputs the number of
+ways to make change for n cents when the coin denominations available
+are those in L.  For example, \texttt{change}([1,5,10,25], 12) should
+return $4$.  What is the running time of your solution?  Faster
+running times get more points.
+
+\paragraph{Question 7:}  Given a directed graph where each edge has a
+length, describe an algorithm that takes as input two vertices $u,v$
+and an integer $k\ge 0$ and outputs the length of the shortest path
+from $u$ to $v$ which takes {\em exactly} $k$ steps.  The path is
+allowed to visit vertices multiple times (for example, the path
+$1\rightarrow 3\rightarrow 2\rightarrow 3\rightarrow 7$ is a valid
+path from $1$ to $7$ of length $4$, even though it visits vertex $3$
+twice).  What is the running time of your algorithm?  You do not have
+to write the code for it.
+
+\paragraph{Question 8:}
+In class I described Karatsuba's algorithm for multiplying two
+$n$-digit numbers, which recursively multiplied three pairs of
+$n/2$-digit
+numbers then combined the results in $O(n)$ time to get an overall
+running time of $\Theta(n^{\log_2 3})$.
+
+Suppose that there existed an algorithm for multiplying two $n$-digit
+numbers which recursively multiplied {\em two} pairs of $n/2$-digit
+numbers
+then combined the results in $O(n)$ time. What would the running time
+then be?
+
+\end{document}

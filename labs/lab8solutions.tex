@@ -1,0 +1,169 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+\usepackage[usenames]{color}
+\newcommand{\ans}[1]{\textcolor{red}{#1}}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Sports Academy \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{2016}{Lab 8 Solutions}
+
+\paragraph{Exercise 1:}
+You are in a 2D-maze.  Find the shortest way to get from the start
+location to the end location.  The starting location is specified by
+`S', and the ending location by `E'.  A cell with `.' represents an
+empty square, and you can walk through it.  A cell with `\#'
+represents a wall, and you cannot walk through it.  From any given
+cell, you can walk either up, down, left, or right, provided that you
+don't walk outside the maze or into a wall.  Find the shortest path
+from the starting location to the end location.
+
+\paragraph{Example solution:}
+Create a graph where each cell is a vertex, and two
+vertices have an edge between them if the corresponding cells are
+adjacent. Then, we do a BFS starting from the cell containing `S' to
+find the distance to the cell containing `E'. The primary function here is \texttt{shortestPath}.
+
+\begin{verbatim}
+def shortestPath(maze, n, m):
+    for i in xrange(n):
+        for j in xrange(m):
+            if maze[i][j] == 'S':
+                sx = i
+                sy = j
+            elif maze[i][j] == 'E':
+                ex = i
+                ey = j
+    # BFS
+    distance = []
+    for i in xrange(n):
+        distance += [[-1]*m]
+    queue = deque()
+    visit(sx, sy, queue, distance, 0)
+    dx = [1, -1, 0, 0]
+    dy = [0, 0, 1, -1]
+    while len(queue) > 0:
+        b = queue.popleft()
+        x = b[0]
+        y = b[1]
+        if x==ex and y==ey:
+            return distance[x][y]
+        # there are at most 4 vertices adjacent to (x,y)
+        for i in xrange(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
+            if nx>=0 and nx<n and ny>=0 and ny<m and maze[nx][ny]!='#':
+                if distance[nx][ny] == -1:
+                    visit(nx, ny, queue, distance, distance[x][y] + 1)
+    if distance[ex][ey] == -1:
+        return -1
+
+def visit(x, y, queue, distance, D):
+    distance[x][y] = D
+    queue += [[x,y]] # push x
+\end{verbatim}
+
+\paragraph{Exercise 2:}
+You are given a 2D-image drawn using $10$ colors.  Each color is
+represented by an integer from $0$ to $9$.  The image is described by
+giving the color of each pixel in the image.  Two pixels are adjacent
+if one is immediately to the left of the other or immediately above
+the other.  The image consists of many objects, and two pixels are
+part of the same object if they are adjacent and have the same color.
+The area of an object is the number of pixels it has.  Find the area
+of the largest object in the image.
+
+\paragraph{Example solution:}
+Create a graph where each pixel is a vertex, and two
+vertices have an edge between them if the corresponding pixels are
+adjacent. Then, we are looking for the size of the largest connected
+component. The \texttt{dfs} function below is recursive and returns
+the number of pixels in the connected component of $(x,y)$ which have
+not already been visited in the variable \texttt{visited}. In the
+\texttt{main} function, we loop over all pixels (the two nested
+\texttt{for} loops), i.e.\ all vertices, and \texttt{dfs} on vertices
+which are in connected components that we haven't already visited.  We
+return the maximum size over all such \texttt{dfs} calls.
+
+\medskip
+
+Here is a recursive solution; the primary function is \texttt{largestObjInImage}:
+
+\begin{verbatim}
+def dfs(x, y, visited, image):
+	dx = [1, -1, 0, 0]
+	dy = [0, 0, 1, -1]
+	n = len(image)
+	m = len(image[0])
+	visited[x][y] = True
+	ans = 1
+	for i in xrange(4):
+		nx = x + dx[i]
+		ny = y + dy[i]
+		if nx>=0 and nx<n and ny>=0 and ny<m and image[x][y]==image[nx][ny]:
+			if not visited[nx][ny]:
+				ans += dfs(nx, ny, visited, image)
+	return ans
+
+
+def largestObjInImage(image):
+	n = len(image)
+	m = len(image[0])
+	visited = []
+	for i in xrange(n):
+		visited += [[False]*m]
+	ans = 0
+	for i in xrange(n):
+		for j in xrange(m):
+			if not visited[i][j]:
+				ans = max(ans, dfs(i, j, visited, image))
+	return ans
+\end{verbatim}
+
+\end{document}

@@ -1,0 +1,158 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+\usepackage[usenames]{color}
+\newcommand{\ans}[1]{\textcolor{red}{#1}}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Sports Academy \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{2016}{Lab 4 Solutions}
+
+\paragraph{Exercise 1:}
+Implement \texttt{selectionSort}, \texttt{insertionSort},
+\texttt{bubbleSort}, and \texttt{mergeSort}.  Try hard to do it
+without looking at the lecture notes, and just by implementing the
+basic ideas of each method:
+
+\begin{itemize}
+\item \texttt{selectionSort}: Find the smallest item, swap it with the
+  item at the beginning, then recursively sort the rest.
+\item \texttt{insertionSort}: Iteratively make sure L[0:i] is sorted,
+  starting with i=1, and going up t i=\texttt{len}(L).
+\item \texttt{bubbleSort}: In each iteration, move from left to right
+  in the list, swapping when necessary.  Terminate when no swaps are
+  left.
+\item \texttt{mergeSort}: Recursively sort the left and right halves
+  of the list, then merge the results.
+\end{itemize}
+
+Now, experiment with the different sorting methods.  In particular,
+try executing the following:
+
+\begin{verbatim}
+>>> n = 100
+>>> L = range(n)
+>>> L.reverse()
+>>> X = bubbleSort(L)
+\end{verbatim}
+
+Note that after the sort has completed, you'll be given back the
+prompt \texttt{>>>}.  As long as the prompt isn't given back yet, the
+sort algorithm is still executing. Try the same code with \texttt{n =
+  10000}. Notice how long it takes for different sorting algorithms
+besides just \texttt{bubbleSort}.  Then try it with \texttt{n =
+  100000}.  Also try it without the \texttt{L.reverse()} line (the
+\texttt{reverse()} function for the \texttt{list} data type reverse
+the elements in the \texttt{list}).
+
+\paragraph{Exercise 2:}
+Implement a function \texttt{hasElementSum}(n, L) where n is an
+\texttt{int} and L is a \texttt{list} of \texttt{int}s.
+The function should return \texttt{False} if no two distinct elements
+in L sum to n, and otherwise it should return a list of size two,
+where the elements of the returned \texttt{list} are two elements in L
+which sum to n.  There can be multiple valid return values.
+Your algorithm should be able to handle lists of
+size up to one million.  Use the fact that \texttt{mergeSort} can
+quickly sort \texttt{list}s of size up to one million.
+
+For example, \texttt{hasElementSum}(5,[1,2,3,4]) could either return
+[1,4], or [4,1], or [2,3], or [3,2].
+\texttt{hasElementSum}(8,[1,2,3,4]) should return \texttt{False} (4+4
+is 8, but you shouldn't use the same element twice).
+\texttt{hasElementSum}(4,[2]) should return \texttt{False} since two
+distinct elements don't sum to $4$ (we don't even have two elements),
+but \texttt{hasElementSum}(4,[2,2]) should return [2,2].
+
+\paragraph{Slow example solution:}
+\begin{verbatim}
+def hasElementSum(n, L):
+	for i in xrange(len(L)):
+		for j in xrange(i+1, len(L)):
+			if L[i]+L[j] == n:
+				return [L[i], L[j]]
+	return False
+\end{verbatim}
+
+If you run the above code on lists of size 10000 or so, you'll already
+start to notice the code running slowly.  The next implementation
+however can run on lists that have millions of elements.
+
+\paragraph{Fast example solution:}
+\begin{verbatim}
+def binarySearch(n, a, b, L):
+    # check if n is in the sorted list L, somewhere between index a and b
+    if a>b:
+        return False
+    mid = (a+b)/2
+    if L[mid] == n:
+        return True
+    elif L[mid] > n:
+        return binarySearch(n, a, b-1, L)
+    else:
+        return binarySearch(n, mid+1, b, L)
+
+def hasElementSum(n, L):
+    L = mergeSort(L)
+    for i in xrange(len(L)):
+        v = L[i]
+        if v+v==n:
+            if (i>0 and L[i-1]==v) or (i+1<len(L) and L[i+1]==v):
+                return [v, v]
+            else:
+                continue
+        elif binarySearch(n-v, 0, len(L)-1, L):
+            return [v, n-v]
+    return False
+\end{verbatim}
+
+There is an even faster way to solve this problem using a technique
+known as {\em hashing}, but it is beyond the scope of this course.
+
+\end{document}

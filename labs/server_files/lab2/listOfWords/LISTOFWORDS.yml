@@ -1,0 +1,39 @@
+- point_value: 0
+  timeout_milliseconds: 120
+  input: |
+    How are you today
+  output: |
+    ['How', 'are', 'you', 'today']
+  is_secret: false
+
+- point_value: 10
+  timeout_milliseconds: 120
+  input: |
+    The quick brown fox jumps over the lazy dog
+  output: |
+    ['The', 'quick', 'brown', 'fox', 'jumps', 'over', 'the', 'lazy', 'dog']
+  is_secret: false
+
+- point_value: 20
+  timeout_milliseconds: 120
+  input: |
+    WhaT yoU See iS7 What y4u g8
+  output: |
+    ['WhaT', 'yoU', 'See', 'iS7', 'What', 'y4u', 'g8']
+  is_secret: true
+
+- point_value: 30
+  timeout_milliseconds: 120
+  input: |
+    700 people enter a room, and everybody shakes everybody's hand exactly once. How many handshakes are there total?
+  output: |
+    ['700', 'people', 'enter', 'a', 'room,', 'and', 'everybody', 'shakes', "everybody's", 'hand', 'exactly', 'once.', 'How', 'many', 'handshakes', 'are', 'there', 'total?']
+  is_secret: true
+ 
+- point_value: 40
+  timeout_milliseconds: 120
+  input: |
+    How  many  handshakes are there total?
+  output: |
+    ['How', '', 'many', '', 'handshakes', 'are', 'there', 'total?']
+  is_secret: true

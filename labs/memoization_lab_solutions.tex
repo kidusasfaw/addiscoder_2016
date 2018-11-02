@@ -1,0 +1,174 @@
+%%
+%% Style file "borrowed" from Michel Goemans
+%%
+\documentclass[11pt]{article}
+
+\usepackage{url,amsmath,amsthm,amsfonts,amssymb}
+\usepackage{pgf}
+
+\def\ceil#1{\lceil #1 \rceil}
+\def\floor#1{\lfloor #1 \rfloor}
+\def\ang#1{\langle #1 \rangle}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\Var}{\hbox{Var}}
+\newcommand{\Z}{{\mathbb Z}}
+\newcommand{\Q}{{\mathbb Q}}
+\newcommand{\C}{{\mathbb C}}
+\newcommand{\N}{{\mathbb N}}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\newcommand{\htitle}[2]{\noindent\vspace*{-\toppush}\newline\parbox{6.5in}
+ {\large Sports Academy \hfill #1\newline
+\hspace*{\fill}{\bf Algorithms and Programming for High Schoolers} \hspace*{\fill} \newline
+\mbox{}\hrulefill\mbox{}}\vspace*{1ex}\mbox{}\newline
+\begin{center}{\Large\bf #2}\end{center}}
+
+\newcommand{\handout}[3]{\thispagestyle{empty}
+ \markboth{ #2}{ #2}
+ \pagestyle{myheadings}\htitle{\protect\ref{#1}}{#2}{#3}}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sq}[1]{\langle#1\rangle}
+
+\begin{document}
+
+\htitle{July 20, 2011}{Lab 12}
+
+\paragraph{Exercise 1:}
+Modify the code for the Bellman-Ford single-source shortest path
+algorithm so that it takes as input the origin $x$ and destination $y$
+and returns the actual shortest {\em path} from $x$ to $y$ and not
+just the length of the shortest path.  You can assume that $y$ is
+reachable from $x$ and that there are no negative weight cycles.
+
+\paragraph{Example solution:}
+The basic idea is to add a list \texttt{from} of length $n$, where $n$
+is the number of vertices.  \texttt{from}[u] is the vertex right
+before u on the shortest path from x to u (if u is x, then we set
+from[u] to $-1$).
+
+\begin{verbatim}
+def bellmanFord(A, x, y):
+    # E is a list of edges with weights
+    E = []
+    for i in xrange(len(A)):
+        for p in A[i]:
+            E += [[i] + p]
+    # dist[i] is the length of the shortest path to i
+    dist = [float(`infinity')]*len(A)
+    from = [-1]*len(A)
+    dist[x] = 0
+    for i in xrange(len(A) - 1):
+        for e in E:
+            u = e[0]
+            v = e[1]
+            weight = e[2]
+            if dist[u] + weight < dist[v]:
+                from[v] = u
+                dist[v] = weight
+
+    # look for negative weight cycles
+    for e in E:
+        u = e[0]
+        v = e[1]
+        weight = e[2]
+        if dist[u] + weight < dist[v]:
+            return -1
+
+    # build the shortest path, from the end to the beginning
+    L = []
+    at = y
+    while at != -1:
+        L += [at]
+        at = from[at]
+    L.reverse()
+    return L 
+\end{verbatim}
+
+\paragraph{Exercise 2:}
+Modify the code for Floyd-Warshall (either the recursive or iterative
+approach) to keep track of a matrix \texttt{next}[][] so that
+\texttt{next}[u][v] is some intermediate vertex on the shortest path
+from u to v (or the Python value \texttt{None} if there is no
+intermediate vertex).  Now write a recursive procedure
+\texttt{findPath} which
+takes $u$, $v$, and the \texttt{dist} and \texttt{next} matrices, and
+returns the shortest path from $u$ to $v$ as a list.  For example, if
+the shortest path from $0$ to $3$ is $0\rightarrow 1\rightarrow 3$,
+then \texttt{findPath} should return [0,1,3].
+
+\paragraph{Example solution:}
+In fact, \texttt{findPath} does not need the \texttt{dist} matrix.
+
+\begin{verbatim}
+# findPath should be called with the next list that's generated in
+# floyd Warshall
+def findPath(u, v, next):
+    # if there's no intermediate vertex, we just directly take the
+    # edge (u,v)
+    if next[u][v] == -1:
+        return [u, v]
+    # otherwise we recurse. in the second recursion we don't take the
+    # 0th element so that next[u][v] doesn't show up twice in the
+    # final output
+    return findPath(u, next[u][v], next) + findPath(next[u][v], v, next)[1:]
+
+def floydWarshall(w):
+    # now dist is a copy of the weight function
+    dist = w[:]
+    next = []
+    for i in xrange(len(w)):
+        next += [[-1]*len(w)]
+
+    for k in xrange(len(w)):
+        for u in xrange(len(w)):
+            for v in xrange(len(w)):
+                if dist[u][k] + dist[k][v] < dist[u][v]:
+                    dist[u][v] = dist[u][k] + dist[k][v]
+                    next[u][v] = k
+    return dist
+\end{verbatim}
+
+\paragraph{Exercise 3:}
+Modify the code for Floyd-Warshall to return -1 if there exists a
+negative weight cycle somewhere in the graph.  Otherwise, it should
+return a matrix of distances as before.
+
+\paragraph{Example solution:}
+There's a negative weight cycle if and only if some vertex has a
+negative distance to itself.
+
+\begin{verbatim}
+def floydWarshall(w):
+    # now dist is a copy of the weight function
+    dist = w[:]
+    for k in xrange(len(w)):
+        for u in xrange(len(w)):
+            for v in xrange(len(w)):
+                dist[u][v] = min(dist[u][v], dist[u][k] + dist[k][v])
+    for i in xrange(len(w)):
+        if dist[i][i] < 0:
+            return -1
+    return dist
+\end{verbatim}
+
+\end{document}

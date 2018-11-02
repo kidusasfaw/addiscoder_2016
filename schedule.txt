@@ -1,0 +1,29 @@
+WEEK 1 (Timnit)
+
+July 18: Basic Python data types, operations, and functions. (lec1, lab1, lab1_python_tutorial)
+July 19: Control flow. (lec2, lab1)
+July 20: Practice problems worked out on board (not written yet). (more time on lab1, lab2 exercises)
+July 21: Recursion and binary search. (lec4, lab3)
+July 22: Practice problems (lec5, still work on lab3; students done with ie can work on addDigits, reverse, and minElement from lab6)
+
+WEEK 2 (Timnit)
+
+July 25: Order of growth (informal, not mathy), sorting. (lec6, lab4)
+July 26: Memoization. (lec7, lab5)
+July 27: More memoization. (lec8, lab5)
+July 28: More memoization. (lec9, lab6)
+July 29: Memoization practice problems worked on board (lec10, continue work on lab5, lab6).
+
+WEEK 3 (Boaz)
+August 1: Memoization practice problems worked on board (lec11, continue work on lab5, lab6).
+August 2: Graph exploration. (lec12, lab7)
+August 3: File I/O and more graph exploration. (lab8, lecture material unspecified -- choose freely)
+August 4: Graph Practice problems worked on board (lec14, continue work on lab7, lab8)
+August 5: Shortest paths (lec15, memoization_lab).
+
+WEEK 4 (Jelani)
+August 8: Numerical algorithms (Karatsuba, fast exponentiation, linear recurrences via fast matrix powering). (lec16, lab9)
+August 9: Practice problems worked on board (lec17, continue lab9)
+August 10: Greedy algorithms (lec18, lab10)
+August 11: More practice problems on board (not written yet). (work on any unsolved lab problems)
+August 12: Final exam.
